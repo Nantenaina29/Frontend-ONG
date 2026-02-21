@@ -1,0 +1,217 @@
+
+.notif-container {
+  width: 100%;
+  max-width: 1100px;
+  
+
+  margin: 5px auto 1.5cm auto !important; 
+  
+  padding: 0 15px;
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  z-index: 5;
+}
+
+
+.notif-card {
+  background: white;
+  border-radius: 20px !important; 
+  
+ 
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12) !important;
+  
+  overflow: hidden; 
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 480px; 
+}
+
+
+.notif-list {
+
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px 25px;
+  background: #ffffff;
+}
+
+/* Fanadiovana ny scrollbar mba ho kanto */
+.notif-list::-webkit-scrollbar {
+  width: 6px;
+}
+.notif-list::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 10px;
+}
+
+/* 3. Ny Header Maitso (mifanitsy amin'ny sary) */
+.notif-header {
+  background-color: #10aa43 !important; /* Maitso mitovy amin'ny sary */
+  color: white;
+  padding: 15px 20px;
+  text-align: center; 
+
+  width: 100%; 
+  border-collapse: collapse;
+  table-layout: fixed; 
+}
+
+.notif-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Mampifanitsy ny icon sy ny soratra eo afovoany */
+  gap: 12px;
+}
+
+
+
+/* Stylisation an'ny andalana tsirairay */
+.notif-item-premium {
+  padding: 15px 0;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+/* Stylisation an'ny Scrollbar (Mba ho hita tsara ny scroll horizontal) */
+.notif-container::-webkit-scrollbar {
+  height: 8px; /* Haavon'ny scroll bar mitsivalana */
+}
+.notif-container::-webkit-scrollbar-thumb {
+  background: #10b981; 
+  border-radius: 10px;
+}
+.notif-list::-webkit-scrollbar {
+  width: 6px;
+}
+.notif-list::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 10px;
+}
+
+/* 5. Item tsirairay */
+.notif-item {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 15px !important;
+  padding: 15px 0 !important;
+  border-bottom: 1px solid #f0f4f8 !important;
+  transition: background 0.2s;
+  min-height: 80px !important; 
+}
+
+.notif-item:hover {
+  background-color: #f8fafc !important;
+}
+
+
+.action-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  flex-shrink: 0;
+}
+.action-icon.orange { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.action-icon.red { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+
+.delete-icon-btn {
+  background: #f8fafc;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.delete-icon-btn:hover { 
+  background: #fff5f5;
+  color: #e74c3c; 
+}
+
+/* Lahatsoratra */
+.notif-info { flex: 1; }
+.notif-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.user-name { font-weight: 700; color: #2d3748; }
+.notif-time { font-size: 0.75rem; color: #a0aec0; }
+.notif-desc { font-size: 0.9rem; color: #4a5568; margin: 0; }
+
+/* --- NOTIFICATION DARK MODE --- */
+
+/* 1. Ny boaty lehibe */
+.dark-theme .notif-card {
+  background-color: #1e293b !important; /* Karatra maizina */
+  border-color: #334155 !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 2. Ny lisitra ao anatiny */
+.dark-theme .notif-list {
+  background-color: #1e293b !important;
+}
+
+/* 3. Ny lohateny (Header) */
+/* Azonao atao ny mitazona ny maintso, saingy somary ahena kely ny famirapiratany */
+.dark-theme .notif-header {
+  background-color: #065f46 !important; /* Maitso antitra kokoa */
+  border-bottom: 1px solid #334155;
+}
+
+/* 4. Ny andalana tsirairay (Items) */
+.dark-theme .notif-item, 
+.dark-theme .notif-item-premium {
+  border-bottom: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+/* Rehefa andalovana (Hover) */
+.dark-theme .notif-item:hover {
+  background-color: #334155 !important;
+}
+
+/* 5. Ny soratra ao anatiny */
+.dark-theme .user-name {
+  color: #f8fafc !important; /* Soratra fotsy */
+}
+
+.dark-theme .notif-desc {
+  color: #cbd5e1 !important; /* Soratra gris maivana */
+}
+
+.dark-theme .notif-time {
+  color: #94a3b8 !important; /* Fotoana kely kokoa */
+}
+
+/* 6. Ny bokotra famafana (Delete icon) */
+.dark-theme .delete-icon-btn {
+  background: #0f172a;
+  color: #64748b;
+}
+
+.dark-theme .delete-icon-btn:hover {
+  background: #450a0a; /* Mena maizina rehefa hover */
+  color: #f87171;
+}
+
+/* 7. Fanadiovana ny Scrollbar amin'ny Dark Mode */
+.dark-theme .notif-list::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark-theme .notif-list::-webkit-scrollbar-track {
+  background: #1e293b;
+}

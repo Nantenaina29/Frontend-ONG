@@ -1,0 +1,253 @@
+/* CONTAINER LEHIBE RAIPY */
+.settings-ultra-wrapper {
+  /* Miantoka fa tsy hikasika footer: 100vh minus ny haavon'ny Navbar sy Footer */
+  height: calc(100vh - 160px); 
+  padding: 30px; /* 0.75cm spacing */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden; /* Tsy avela hivoaka ny cards */
+  animation: settingsFadeIn 0.6s ease-out;
+}
+
+/* GRID LAYOUT (Ny Cards telo) */
+.settings-main-content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  width: 100%;
+  max-width: 1400px;
+  height: 100%; /* Fenonina ny haavon'ny wrapper */
+}
+
+/* STYLE IREO CARDS (Uniforme) */
+.settings-card-premium {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 25px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  overflow-y: auto; /* Raha sanatria kely ny efijery dia ao anaty card no misy scroll */
+}
+
+.settings-card-premium:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  border-color: #10b981;
+}
+
+/* LOGO SECTION */
+.logo-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-logo-premium {
+  max-width: 70%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.05));
+  border-radius: 50%;
+}
+
+/* AVATAR RING */
+/* 1. Ny Container iray manontolo */
+.avatar-section-premium {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px;
+  position: relative;
+}
+
+/* 2. Ny Boribory maitso manodidina ny sary */
+.avatar-ring ,.avatar-placeholder{
+  position: relative;
+  width: 90px;  /* Habe antonona araka ny sary */
+  height: 90px;
+  border-radius: 50%;
+  padding: 3px;
+  background: #10b981; /* Loko maitso TAF */
+  margin-bottom: 10px;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.15);
+}
+
+.avatar-ring img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ffffff; /* Sisiny fotsy manasaraka ny sary sy ny maitso */
+  display: block;
+}
+
+/* 3. Ilay Camera kely mainty eo amin'ny sisiny */
+.camera-overlay {
+  position: absolute;
+  bottom: 2px;
+  right: -2px;
+  background: #000000; /* Loko mainty araka ny sary bot.jpg */
+  color: #ffffff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease-in-out;
+  z-index: 10;
+}
+
+.camera-overlay:hover {
+  background: #10b981;
+  transform: scale(1.1);
+}
+
+
+
+/* INPUTS (Compact & Madio) */
+.field-group {
+  margin-bottom: 12px;
+}
+
+.field-group label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: black;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.field-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.field-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.field-input input {
+  width: 100%;
+  padding: 10px 10px 10px 35px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  transition: 0.2s;
+}
+
+.field-input input:focus {
+  border-color: #10b981;
+  background: #fff;
+  outline: none;
+}
+
+/* BUTTON ACTION */
+.btn-action-premium {
+  width: 100%;
+  padding: 12px;
+  background: #10b981;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: auto; /
+}
+
+
+.card-inner-header-with-icon {
+  display: flex;
+  align-items: center; 
+  gap: 12px;           
+  margin-bottom: 25px; 
+  color: #10b981;     
+}
+
+.card-inner-header-with-icon h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #334155;
+  margin: 0;           
+  line-height: 1;      
+}
+
+.card-icon {
+  font-size: 1.4rem;   /* Habe antonona ho an'ny icon */
+  display: flex;       /* Miantoka fa tsy misy spacing ambany loatra ny icon */
+  align-items: center;
+}
+
+/* Lohateny mainty foana na inona na inona theme */
+.mainty-foana h2 {
+  color: #000000 !important; /* Mainty tanteraka */
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.mainty-foana p {
+  color: #334155 !important; /* Volomparasy antitra (mbola hita amin'ny maizina) */
+  font-weight: 500;
+}
+
+/* Raha tianao ho mainty tanteraka koa ny soratra kely */
+.mainty-foana p.mainty-koa {
+  color: #000000 !important;
+}
+
+.header-text-stack {
+  display: flex;
+  flex-direction: column;
+  /* Mampitombo ny elanelana mitsangana eo amin'ny h3 sy ny p */
+  gap: 8px; 
+}
+
+.card-description-premium {
+  font-size: 0.85rem;
+  color: #02132b;
+  margin: 0;
+  line-height: 1.5;
+  margin-top: 22px; 
+}
+
+.card-inner-header-with-icon {
+  display: flex;
+  align-items: flex-start; /* Ovaina ho flex-start mba tsy hiondrika ny icon */
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.card-icon {
+  margin-top: 0px; /* Ampidinina kely fotsiny ny icon mba hifanitsy amin'ny h3 */
+}
+
+/* RESPONSIVE */
+@media (max-width: 1000px) {
+  .settings-ultra-wrapper {
+    height: auto;
+    overflow: visible;
+  }
+  .settings-main-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@keyframes settingsFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

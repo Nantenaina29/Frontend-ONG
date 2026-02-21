@@ -1,0 +1,114 @@
+/* Ny fitoerana manontolo */
+.trash-section {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #f4f7f6;
+    box-sizing: border-box;
+}
+
+/* Ny vata misy ny tabilao (mitsingevana) */
+.table-container {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Mba tsy hivoaka ny zorony borory */
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px; /* Elanelana amin'ny footer */
+}
+
+/* Fampiharana ny scroll bar ao amin'ny vatan'ny tabilao ihany */
+.table-scroll {
+    overflow-y: auto;
+    max-height: 280px; /* Tokony ho andalana 4 eo ho eo */
+}
+
+/* Ataovy fixe ny lohaten'ny tabilao */
+.premium-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #f8f9fa;
+}
+
+.premium-table th {
+    padding: 18px;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #7f8c8d;
+    border-bottom: 2px solid #edf2f7;
+}
+
+/* Style ho an'ny scrollbar mba ho voadio (Premium) */
+.table-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.table-scroll::-webkit-scrollbar-thumb {
+    background: #bdc3c7;
+    border-radius: 10px;
+}
+
+/* --- TRASH PAGE DARK MODE --- */
+
+/* 1. Ny fitoerana manontolo (Background) */
+.dark-theme .trash-section {
+    background-color: #0f172a !important; /* Manga antitra be */
+    color: #f1f5f9;
+}
+
+/* 2. Ny vata misy ny tabilao */
+.dark-theme .table-container {
+    background: #1e293b !important; /* Slate 800 */
+    border: 1px solid #334155;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 3. Ny lohaten'ny tabilao (Thead) */
+.dark-theme .premium-table thead {
+    background-color: #111827 !important; /* Mainty kokoa */
+}
+
+.dark-theme .premium-table th {
+
+    color: #000000 !important; 
+    background-color: #f8f9fa !important; 
+
+    border-bottom: 2px solid #334155;
+
+    font-weight: 700;
+}
+/* 4. Ny andalana sy ny sela (Rows & Cells) */
+.dark-theme .premium-table td {
+    color: #e2e8f0 !important;
+    border-bottom: 1px solid #334155;
+}
+
+/* Rehefa andalovan'ny mouse (Hover) */
+.dark-theme .premium-table tr:hover {
+    background-color: rgba(51, 65, 85, 0.5) !important;
+}
+
+/* 5. Ny Scrollbar ao amin'ny Trash */
+.dark-theme .table-scroll::-webkit-scrollbar-thumb {
+    background: #475569; /* Gris matroka kokoa */
+}
+
+.dark-theme .table-scroll::-webkit-scrollbar-track {
+    background: #1e293b;
+}
+
+/* 6. Ireo bokotra Actions ao amin'ny Trash (ohatra: Restore na Delete Forever) */
+.dark-theme .btn-restore {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.dark-theme .btn-delete-permanent {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}

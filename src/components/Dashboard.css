@@ -1,0 +1,1880 @@
+:root {
+  --maintso: #10b981;
+  --bleu-ciel: white;
+  --dark: #0ea5e9;
+  --bg-page: #f8fafc;
+  --sidebar-w: 280px;
+  --nav-h: 70px;
+  --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+.dashboard-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-weight: 500;
+}
+
+/* --- NAVBAR FIXE --- */
+.top-navbar {
+  height: var(--nav-h);
+  background: rgb(6, 177, 106);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  z-index: 1001;
+  
+}
+
+/* Container an'ny nav-right */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Elanelana eo amin'ny icons sy profil */
+}
+
+/* Style ho an'ny bokotra icons (Dark mode, Settings) */
+.nav-icon-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #555;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s;
+}
+
+.nav-icon-btn:hover {
+  color: #007bff; /* Loko manga rehefa hover */
+}
+
+/* Profile Section */
+.user-profile-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-left: 0px; 
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+
+
+/* Avatar */
+.user-avatar, .user-avatar-placeholder {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  color: #999;
+}
+
+.nav-left { display: flex; align-items: center; gap: 20px; }
+.sidebar-toggle {
+  background: var(--maintso);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;    
+  justify-content: center;  
+  gap: 15px;               
+  width: 100%;             
+  padding: 10px 0;
+}
+
+
+.nav-logo {
+  height: 45px;           
+  width: auto;
+  display: block;
+  border-radius: 50%;
+}
+
+.nav-title {
+  margin: 0;
+  font-size: 1.5rem;
+  display: flex;
+  gap: 8px;           
+}
+
+.nav-title span {
+  color: white;      
+  font-weight: bold;
+}
+
+/* --- SIDEBAR MITSINGEVANA (OVERLAY) --- */
+.main-sidebar {
+  position: absolute;
+  top: var(--nav-h);
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--dark);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition);
+  box-shadow: 10px 0 30px rgba(110, 206, 223, 0.2);
+}
+
+
+.main-sidebar.closed { transform: translateX(-100%); }
+.main-sidebar.open { transform: translateX(0); }
+
+.nav-menu { list-style: none; padding: 25px 15px; flex: 1; overflow-y: auto; }
+.nav-menu li {
+  padding: 14px 18px;
+  color: black;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 2px;
+  transition: 0.3s;
+  font-weight: 500;
+}
+
+.nav-menu li:hover, .nav-menu li.active {
+  background: linear-gradient(to right, var(--maintso), var(--bleu-ciel));
+  color: black;
+  transform: translateX(5px);
+}
+
+.sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+.btn-logout {
+  width: 100%; padding: 12px; background: #ef4444; color: white;
+  border: none; border-radius: 10px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; gap: 10px; font-weight: 600;
+}
+
+/* --- OVERLAY --- */
+.sidebar-overlay {
+  position: fixed;
+  top: var(--nav-h);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 1500;
+}
+
+/* --- CONTENT FIXE (Tsy mihetsika) --- */
+/* 1. Ny Container lehibe */
+.main-content-landing {
+  flex: 1;
+  background-color: #f8fafc;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Foana eo afovoany */
+  padding: 28px;       /* 0.75cm ny padding ambony/ambany/havia/havanana */
+  box-sizing: border-box;
+}
+
+/* 2. Ny vatan'ny pejy - ETO NO MIADY */
+.home-presentation {
+  /* Ampiasao ny 100% fa esory ny padding (28px ankavia + 28px ankavanana = 56px) */
+  width: calc(100% - 0px); 
+  /* Tsy asiana max-width intsony mba hivelatra fa tsy hanao espace malalaka be */
+  max-width: 100%; 
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 3. Ny Hero Banner - Ataovy 100% ny sakany */
+.hero-banner {
+  width: 100%;
+  position: relative;
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  padding: 40px 60px; /* Padding ao anaty banner */
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* 4. Ny Info Grid - Avelao hivelatra hanaraka ny sakany */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 5;
+  max-width: 60%;
+  color: white;
+}
+
+/* 4. NY STYL'ILAY SARY: Boribory tsara sy eo ankavanana */
+.hero-illustration {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  
+  /* --- ITY NO FAMPIDIRANA AZY --- */
+  object-fit: cover; 
+  object-position: center; /* Mba ho eo afovoany tsara ny sary */
+  
+  border: 8px solid rgba(255, 255, 255, 0.2);
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+  z-index: 5;
+
+  
+}
+
+/* 5. TYPOGRAPHY: Natao mazava tsara */
+.hero-banner h2 {
+  font-size: 2.5rem !important;
+  font-weight: 800 !important;
+  margin-bottom: 10px !important;
+  color: white !important;
+}
+
+.hero-tagline {
+  font-size: 1.2rem !important;
+  opacity: 0.9;
+  margin-bottom: 25px !important;
+  font-weight: 400 !important;
+}
+
+
+.info-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid #2e83f3;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+}
+
+.card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.info-card h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #1e293b;
+}
+
+.info-card p {
+  font-size: 0.95rem;
+  color: #060708;
+  line-height: 1.6;
+}
+
+/* Borders ambony ho an'ny cards */
+.highlight-green { border-top: 6px solid #10b981; }
+.highlight-blue { border-top: 6px solid #3b82f6; }
+.highlight-green .card-icon { color: #10b981; }
+.highlight-blue .card-icon { color: #3b82f6; }
+
+/* 7. BOUTON LOGIN: Eo ambanin'ny tagline */
+.hero-login-btn {
+  display: flex;
+  align-items: center;
+  background: white;
+  color: #059669;
+  border: none;
+  padding: 14px 28px; /* Natao ngeza kely mba ho premium */
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  
+  /* ETO NY ELANELANA AMBONY */
+  margin-top: 25px; 
+  
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+}
+
+.hero-login-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+  background: #fdfdfd;
+}
+
+/* RESPONSIVE: Raha kely ny ecran */
+@media (max-width: 900px) {
+  .info-grid { grid-template-columns: 1fr; }
+  .hero-banner { 
+    flex-direction: column; 
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .hero-content { max-width: 100%; margin-bottom: 30px; }
+  .hero-illustration { width: 200px; height: 200px; }
+}
+
+/* --- FOOTER --- */
+.main-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgb(6, 177, 35); 
+  text-align: center;
+  padding: 15px 0; 
+  color: white;
+  font-size: 0.9rem;
+  border-top: 1px solid #eee;
+  z-index: 1000; 
+}
+/* --- MEMBRES PAGE SPECIFIC --- */
+.membre-page {
+  animation: fadeIn 0.5s ease-in;
+}
+
+.page-title {
+  color: var(--dark);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  border-left: 6px solid var(--maintso);
+  padding-left: 15px;
+}
+
+/* --- TOP ACTIONS (Search & Buttons) --- */
+.membre-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  margin-bottom: 25px;
+}
+
+.membre-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* --- BUTTONS STYLE --- */
+.btn-add, .btn-export, .btn-more {
+  display: flex;
+  align-items: center;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+.btn-add {
+  background: var(--maintso);
+  color: white;
+}
+
+.btn-add:hover { background: #0d9488; transform: translateY(-2px); }
+
+.btn-export {
+  background: white;
+  color: var(--dark);
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease; /* Mba hampalemy ny fiovan'ny border */
+}
+
+.btn-export:hover {
+  background: #f8fafc; 
+  border-color: var(--bleu-ciel);
+  /* Averina soratana eto ny loko mba tsy hiova */
+  color: var(--dark) !important; 
+}
+
+.btn-more {
+  background: rgb(6, 89, 167);
+  color: white;
+  gap: 8px;
+}
+
+.btn-more:hover { opacity: 0.9; }
+
+/* --- SEARCH BOX --- */
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-box input {
+  padding: 10px 40px 10px 15px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  width: 280px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.search-box input:focus {
+  border-color: var(--bleu-ciel);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  right: 15px;
+  color: #94a3b8;
+}
+
+/* --- STATISTICS CARDS (Avatars) --- */
+/* Container: mampiasa gap kely nefa madio */
+.statistics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Card: Effet Premium (Soft Shadow + Hover) */
+.stat-card-avatar {
+  background: #ffffff;
+  padding: 10px 14px;
+  border-radius: 12px; /* Boribory kokoa = modern */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid #f1f5f9; /* Border maivana kely */
+  border-left-width: 4px !important;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.3s ease; /* Animation */
+}
+
+.stat-card-avatar:hover {
+  transform: translateY(-3px); /* Miakatra kely rehefa hovered */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Layout Horizontal ho an'ny icon sy sanda */
+.avatar-container-single, .avatar-container {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 10px;
+}
+
+/* Ny Icon boribory: kely nefa hita tsara */
+.avatar-circle {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px;
+  border-radius: 10px; /* Modern: square-round */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Ny Label kely eo amboniny */
+.stat-label {
+  font-size: 8px;
+  color: #94a3b8; /* Gris maivana pro */
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+}
+
+/* Ny Isa (Count): Antsaky ny bold (600) */
+.avatar-info {
+  display: flex;
+  flex-direction: row; /* Ataovy andalana iray ny isa sy ny anarana kely */
+  align-items: baseline;
+  gap: 4px;
+}
+
+.avatar-count {
+  font-size: 1.15rem;
+  font-weight: 600; /* Medium-Bold */
+  line-height: 1;
+  color: #1e293b;
+}
+
+.avatar-name {
+  font-size: 10px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+
+/* Genre spécifique (H sy F mifanila) */
+.avatar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Gender Colors */
+.male-bg { background: #3498db; }
+.female-bg { background: #e74c3c; }
+.male-text { color: #3498db; }
+.female-text { color: #e74c3c; }
+
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  padding: 20px;
+  background: #f8fafc;
+  
+  height: calc(100vh - var(--nav-h)); 
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; 
+}
+
+
+.table-container {
+  background: white;
+  width: 100%; /* Maka ny sakan'ny content rehetra */
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  margin-top: 15px;
+  max-height: 320px; 
+  overflow-y: auto; 
+  overflow-x: auto; 
+  border: 1px solid #e2e8f0;
+}
+
+/* Miantoka fa ny andry rehetra ao anaty table dia mifandanja */
+.membre-table td {
+  padding: 12px 10px;
+  text-align: center; /* Ity no mametraka azy eo am-ponony (center) */
+  vertical-align: middle;
+  font-size: 0.9rem;
+  color: #334155;     /* Gris matroka kanto */
+  font-weight: 500;    /* Antsaky ny bold (Medium) */
+  border-bottom: 1px solid #f1f5f9;
+  
+}
+
+/* Ampiharina amin'ny andry rehetra ny width efa natao tany amin'ny th */
+.col-id { width: 50px; }
+.col-name { width: 180px; text-align: left !important; padding-left: 20px !important; } /* Ny anarana matetika no tsara atao "left" */
+.col-firstname { width: 180px; text-align: left !important; }
+.col-sex { width: 80px; }
+.col-year { width: 80px; }
+.col-status { width: 100px; }
+.col-house { width: 100px; }
+.col-actions { width: 120px; }
+
+/* Fanatsarana ny Action Icons ho Premium */
+.action-icons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  border-bottom: none !important; /* Mba tsy hisy tsipika eo anelanelan'ny bokotra */
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 1.1rem;
+}
+
+.btn-icon.edit { color: #3498db; }
+.btn-icon.edit:hover { background: #ebf5ff; }
+
+.btn-icon.delete { color: #e74c3c; }
+.btn-icon.delete:hover { background: #fff1f0; }
+
+/* Ny andry tsirairay ao amin'ny thead */
+.membre-table thead th {
+  position: sticky; /* Ity no harafesina eo ambony */
+  top: 0;
+  z-index: 10;
+  background-color: #13b5d1; /* Loko maivana pro */
+  color: black;
+  font-weight: 600; /* Antsaky ny bold */
+  font-size: 0.85rem;
+  padding: 12px 10px;
+  text-align: center;
+  border-bottom: 2px solid #e2e8f0;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1); /* Manasaka tsara ny lohateny sy data */
+}
+
+/* Fandaminana ny sakany (Width) */
+.col-id { width: 50px; }        /* Kely fotsiny ny laharana */
+.col-name { width: 180px; }     /* Malalaka kely ny anarana */
+.col-firstname { width: 180px; } 
+.col-sex { width: 80px; }       /* Kely ny sexe (H/F) */
+.col-year { width: 80px; }
+.col-status { width: 100px; }   /* Chef na Non */
+.col-house { width: 100px; }
+.col-actions { width: 120px; }
+
+
+.row-chef td {
+  color: #27ae60 !important; /* Maintso */
+  font-weight: 600 !important; /* Somary matavy */
+}
+
+.row-chef {
+  background-color: rgba(39, 174, 96, 0.03); 
+}
+
+/* Raha tianao ho "Fixed" ny tabilao (tsy miovaova sakany) */
+.membre-table {
+  width: 100%;
+  table-layout: fixed; /* Ity no manery ireo width ireo ho hajaina */
+  border-collapse: collapse;
+}
+
+.col-xs { width: 90px; text-align: center; }
+.col-sm { width: 80px; text-align: center; }
+
+.col-md { 
+  min-width: 120px; 
+  white-space: nowrap; 
+  text-align: center;
+}
+
+
+.col-lg {
+  min-width: 250px;       
+  white-space: normal;    
+  word-wrap: break-word;  
+  line-height: 1.5;       
+  color: #1e293b;
+  font-weight: 500;
+}
+
+/* --- HAINGO HO AN'NY SCROLLBAR --- */
+.table-container::-webkit-scrollbar {
+  width: 8px; /* Sakan'ny scrollbar */
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #10b981; 
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #0ea5e9; /* Loko bleu ciel rehefa kitihina */
+}
+
+.membre-table {
+  width: 100%; 
+  border-collapse: collapse;
+  table-layout: fixed; 
+}
+.membre-table th {
+  background: #3cc2da;
+  color: #000307;
+  font-weight: 700;
+  padding: 15px;
+  font-size: 14px;
+  border-bottom: 2px solid #edf2f7;
+}
+
+.membre-table td {
+  padding: 14px 15px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1e293b;
+  font-size: 14px;
+  align-items: center;
+  font-weight: 400;
+
+}
+
+.membre-table tr:hover {
+  background-color: #f0f9ff;
+}
+
+.action-icons {
+  display: flex;
+  gap: 15px;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: 0.2s;
+}
+
+.icon.edit:hover { transform: scale(1.2); filter: hue-rotate(90deg); }
+.icon.delete:hover { transform: scale(1.2); filter: brightness(1.2); }
+
+/* Fon'ny modal (Overlay) */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7); /* Loko maizina kely */
+  backdrop-filter: blur(8px); /* Effet flou pro */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+/* Ny vatan'ny Modal */
+.modal-content {
+  background: #ffffff;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 28px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Titre ao ambony */
+.modal-content h2 {
+  background: #f8fafc;
+  margin: 0;
+  padding: 25px 30px;
+  color: #1e293b;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-align: center;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* COLOR RESEAUX */
+
+.text-green {
+  color: #27ae60;
+  font-weight: 700;
+}
+
+
+.text-blue {
+  color: #2980b9;
+  font-weight: 700;
+}
+
+
+.text-green, .text-blue {
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* Ny vatan'ny formulaire (Grid Layout) */
+.premium-form {
+  padding: 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Mizara roa mitovy */
+  gap: 20px;
+}
+
+/* Label sy Input group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #64748b;
+  margin-left: 5px;
+}
+
+.form-group input, 
+.form-group select {
+  padding: 12px 16px;
+  border: 2px solid #f1f5f9;
+  border-radius: 14px;
+  background: #f8fafc;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #334155;
+  transition: all 0.2s ease;
+}
+
+
+.form-group input:focus, 
+.form-group select:focus {
+  outline: none;
+  border-color: #10b981; 
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+.export-container {
+  position: relative;
+  z-index: 100 !important;
+}
+
+.dropdown-menu {
+  display: block !important; 
+  z-index: 101 !important;
+}
+
+.btn-export {
+  pointer-events: auto !important; 
+}
+
+
+.modal-buttons {
+  grid-column: span 2; 
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 20px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.btn-cancel {
+  padding: 12px 25px;
+  border-radius: 12px;
+  border: none;
+  background: #d82121;
+  color: #eff4fa;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-save {
+  padding: 12px 30px;
+  border-radius: 12px;
+  border: none;
+  background: #10b981;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+  transition: 0.2s;
+}
+
+.btn-save:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+.multi-select {
+  min-height: 80px; /* Mba hisy haavony tsara */
+  padding: 8px !important;
+  font-size: 0.9rem !important;
+  cursor: pointer;
+}
+
+.multi-select option {
+  padding: 8px;
+  border-radius: 6px;
+  margin-bottom: 2px;
+}
+
+.multi-select option:checked {
+  background: var(--maintso) linear-gradient(0deg, var(--maintso) 0%, var(--maintso) 100%);
+  color: white;
+}
+
+.help-text {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+input[type="date"] {
+  cursor: pointer;
+  font-family: inherit;
+}
+.premium-form {
+  padding: 25px;
+  display: grid;
+
+  grid-template-columns: 1.2fr 1fr; 
+  gap: 20px;
+  align-items: start;
+}
+
+
+.form-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+
+.multi-select-gs {
+  height: 180px !important; 
+  padding: 10px;
+  border-radius: 12px;
+  border: 2px solid #f1f5f9;
+}
+
+
+.modal-buttons {
+  grid-column: span 2; 
+  margin-top: 15px;
+  padding-top: 20px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+/* --- DROPDOWN EXPORT --- */
+.dropdown-menu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  list-style: none;
+  z-index: 100;
+  min-width: 150px;
+  padding: 10px 0;
+  border: 1px solid #f1f5f9;
+}
+
+.dropdown-item {
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.dropdown-item:hover {
+  background: #3f8ad4;
+  color: var(--bleu-ciel);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.formation-wrapper {
+  background: white;
+  width: 100%; /* Maka ny sakan'ny content rehetra */
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  margin-top: 15px;
+  max-height: 320px; 
+  overflow-y: auto; 
+  overflow-x: auto; 
+  border: 1px solid #e2e8f0;
+  position: relative;
+}      
+
+/* 1. Ho an'ny container rehetra misy tabilao */
+.table-container, .formation-wrapper {
+  overflow-y: auto !important; /* Terena hisy scrollbar vertical */
+  overflow-x: auto !important; /* Terena hisy scrollbar horizontal */
+  -webkit-overflow-scrolling: touch; /* Ho an'ny finday */
+}
+
+/* 2. Avereno velomina ny endriny (Mba ho hita tsara) */
+.table-container::-webkit-scrollbar, 
+.formation-wrapper::-webkit-scrollbar {
+  width: 10px !important;  /* Haavony (vertical) */
+  height: 10px !important; /* Sakany (horizontal) */
+  display: block !important; /* Terena hiseho */
+}
+
+.table-container::-webkit-scrollbar-thumb,
+.formation-wrapper::-webkit-scrollbar-thumb {
+  background: #10b981 !important; /* Loko maintso efa nampiasainao */
+  border-radius: 10px !important;
+  border: 2px solid white !important; /* Manome elanelana kely */
+}
+
+.table-container::-webkit-scrollbar-track,
+.formation-wrapper::-webkit-scrollbar-track {
+  background: #f1f5f9 !important; /* Loko fotsy fotsy kely */
+}
+
+
+/* Force-o ny tabilao ho plein écran */
+.formation-table {
+  width: 100%;
+  table-layout: auto; /* Ity no manery ireo width ireo ho hajaina */
+  border-collapse: collapse;
+  min-width: 1800px;/* Ity no manery ireo width ireo ho hajaina */
+
+}
+
+.formation-table thead th {
+  position: sticky;
+  top: 0;
+  background: #48b5e7;
+  z-index: 10; 
+  white-space: nowrap;
+  padding: 12px 8px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+
+.formation-table td:nth-child(2) {
+  position: sticky;
+  left: 0;
+  background: white;
+  z-index: 5; /* Mila kely noho ny lohateny (10) ity */
+  border-right: 2px solid #e2e8f0;
+}
+
+.formation-table thead th:nth-child(2) {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 20; 
+  background: #48b5e7; 
+}
+
+/* Haingo ho an'ny sela tsirairay */
+.formation-table td {
+  padding: 10px 5px;
+  text-align: center;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 16px;
+ 
+}
+
+/* Loko manokana ho an'ny andalana rehefa kitihina */
+.formation-table tr:hover {
+  background-color: #f0f9ff;
+}
+.formation-table tr:hover td:nth-child(2) {
+  background-color: #f0f9ff; 
+  font-weight: bold;
+}
+/* --- TABLEAU --- */
+.gs-list-cell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 300px;
+}
+
+.gs-badge-item {
+  background: #f0f4f8;
+  color: #475569;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  border: 1px solid #e2e8f0;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.status-badge.autonome { background: #dcfce7; color: #166534; }
+.status-badge.non-autonome { background: #fee2e2; color: #991b1b; }
+
+/* --- TABLE LAYOUT FIXED --- */
+.table-respo {
+  width: 100%; /* Eto no tena manan-danja: terena hameno ny sakany rehetra */
+  border-collapse: collapse;
+  table-layout: fixed; /* Manery ny fitsinjarana andry */
+}
+.table-respo thead th {
+  /* --- ETO NY FEPETRA --- */
+  position: sticky;
+  top: 0;            
+  z-index: 10;        
+  
+  /* --- HAINGO PREMIUM --- */
+  background: #0ea5e9; /* Loko maivana mba hisaraka amin'ny vatany */
+  padding: 12px 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: black;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid #e2e8f0;
+  text-align: center; 
+}
+/* --- COLUMN WIDTHS (%) --- */
+.col-id { width: 5%; text-align: center; }
+.col-name { width: 20%; font-weight: 700; color: #1e293b; text-align: center; }
+.col-sexe { width: 10%; text-align: center; }
+.col-gs-respo { width: 20%; color: #64748b; text-align: center; }
+.col-poste { width: 25%; text-align: center; }
+.col-action-btn { width: 20%; text-align: center; }
+
+/* --- STYLE NY TEXT AO ANATY TD --- */
+.table-respo td {
+  padding: 15px 10px;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.9rem;
+}
+
+/* Badge ho an'ny Poste */
+.poste-text {
+  background: #f0fdf4;
+  color: #166534;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 1px solid #dcfce7;
+}
+
+.no-poste {
+  color: #94a3b8;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+/* --- BUTTON MODIFIER PREMIUM --- */
+.btn-edit-simple {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  color: #1e293b;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.btn-edit-simple:hover {
+  background: #f8fafc;
+  border-color: #3b82f6;
+  color: #3b82f6;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* --- MODAL FLEX --- */
+/* Container Modal */
+.premium-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 95%;
+  max-width: 550px; /* Ahena ny halehibeny */
+  overflow: hidden;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-header {
+  background: #f8fafc;
+  padding: 15px 25px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  font-size: 1.1rem;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* Fandaminana ny Column */
+.form-flex-container {
+  display: flex;
+  gap: 25px;
+  padding: 25px;
+  align-items: flex-start;
+}
+
+.form-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Style ho an'ny Input sy Select */
+.form-group-modern label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.form-input, .form-select-multi {
+  width: 100%;
+  padding: 10px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus, .form-select-multi:focus {
+  border-color: #3b82f6;
+}
+
+/* Select NomGS andalana 4 */
+.form-select-multi {
+  height: 110px !important;
+  background-color: #fcfcfc;
+}
+
+/* Bokotra mitsivalana eo ambany */
+.modal-footer-inline {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Ny container lehibe mizara roa */
+.form-flex-container {
+  display: flex !important;
+  gap: 30px !important;
+  align-items: stretch !important;
+}
+
+/* Ny tsanganana faharoa izay misy ny bokotra */
+.action-column {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important; /* Manosika ny footer ho any ambany indrindra */
+  flex: 1 !important;
+}
+
+/* Ny footer misy ny bokotra */
+.modal-footer-right {
+  display: flex !important;
+  justify-content: flex-end !important; /* Ity no manosika miankavanana */
+  gap: 12px !important;
+  margin-top: 20px !important; /* Elanelana kely amin'ilay select eo ambony */
+}
+
+.btn-annuler {
+  background-color: red !important;
+  color: white !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+}
+
+.btn-creer {
+  background-color: green !important;
+  color: white !important;
+  border: none !important;
+  padding: 10px 25px !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: opacity 0.2s !important;
+}
+
+.btn-creer:hover {
+  opacity: 0.9 !important;
+}
+
+/* Checklist ho an'ny Edit */
+.autonomie-checklist {
+  background: #f8fafc;
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 15px;
+  border: 1px solid #f1f5f9;
+}
+
+.checklist-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.checkbox-modern {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+/* Scrollbar kely */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+/* --- MODAL OVERLAY --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.4); /* Loko maizina kely */
+  backdrop-filter: blur(4px); /* Effet flou eo aoriana */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* --- MODAL CONTENT --- */
+.modal-content-premium {
+  background: #ffffff;
+  width: 90%;
+  max-width: 450px;
+  border-radius: 20px;
+  padding: 0;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Header kely ao anaty modal */
+.modal-header-lite {
+  background: #f8fafc;
+  padding: 20px 25px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header-lite h3 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* Vatany (Body) */
+.modal-body-premium {
+  padding: 25px;
+}
+
+.info-row {
+  display: flex;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+.info-label {
+  color: #64748b;
+  width: 110px;
+  font-weight: 500;
+}
+
+.info-value {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+/* Form Group */
+.form-group-premium {
+  margin-top: 25px;
+}
+
+.form-group-premium label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.form-control-premium {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  color: #1e293b;
+  background-color: #fcfcfc;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.form-control-premium:focus {
+  border-color: #3b82f6;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+/* --- BUTTONS --- */
+.modal-buttons-premium {
+  display: flex;
+  gap: 12px;
+  padding: 20px 25px;
+  background: #f8fafc;
+  justify-content: flex-end;
+}
+
+.btn-cancel-premium, .btn-save-premium {
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancel-premium {
+  background: #db1a1a;
+  border: 1px solid #e2e8f0;
+  color: white;
+}
+
+
+.btn-save-premium {
+  background: #04a165; /* Loko maizina mifanaraka amin'ny sary teo */
+  border: none;
+  color: white;
+}
+
+
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+/* --- MODAL STRUCTURE --- */
+/* --- MODAL STRUCTURE COMPACT --- */
+.wide-modal {
+  max-width: 600px !important; /* Nahena avy amin'ny 800px */
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.modal-header-premium {
+  padding: 12px 20px; /* Nahena ny padding */
+  background: #f8fafc;
+}
+
+.modal-header-premium h3 {
+  font-size: 1.1rem; /* Nahena ny habe */
+}
+
+/* --- GRID 2 COLUMNS COMPACT --- */
+.premium-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px; /* Nahena ny elanelana */
+  padding: 10px 0;
+}
+
+.card-sub {
+  padding: 8px 12px; /* Nahena be ny padding ao anaty boaty */
+  border-radius: 8px;
+  font-size: 0.85rem; /* Ahena ny haben'ny soratra */
+}
+
+.group-label {
+  font-size: 0.75rem; /* Kely kokoa ny lohateny kely */
+  margin-bottom: 5px;
+}
+
+.checkbox-group-inner {
+  gap: 4px; /* Akatona kely ny elanelan'ny checkbox */
+}
+
+/* --- INPUT SECTION --- */
+.full-width-section {
+  margin-top: 5px;
+  padding-top: 10px;
+}
+
+.form-group-premium label {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.form-control-premium {
+  padding: 8px 12px; /* Nahena ny haavon'ny input */
+  font-size: 0.9rem;
+}
+
+/* --- FOOTER COMPACT --- */
+.modal-footer-premium {
+  margin-top: 15px;
+  padding-top: 15px;
+  gap: 10px;
+}
+
+.btn-cancel-premium, .btn-save-premium {
+  padding: 8px 16px; /* Nahena ny haben'ny bokotra */
+  font-size: 0.85rem;
+}
+
+/* MODE SOMBRE */
+
+/* --- DARK MODE OVERRIDES --- */
+.dark-theme {
+  --bg-page: #0f172a;       /* Manga antitra be ny sary aoriana */
+  --bg-card: #1e293b;       /* Karatra somary maivana kely */
+  --text-main: #f1f5f9;     /* Soratra fotsy */
+  --text-sub: #94a3b8;      /* Soratra gris maivana */
+  --border-color: #334155;  
+  --navbar-bg: #020617;     
+}
+/* Container lehibe */
+.dashboard-container.dark-theme {
+  background-color: var(--bg-page);
+  color: var(--text-main);
+}
+
+/* Navbar sy Sidebar */
+.dark-theme .top-navbar {
+  background: var(--navbar-bg) !important;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dark-theme .main-sidebar {
+  background: #111827 !important; /* Sidebar maizina kokoa */
+  box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Ny Karatra (Cards) */
+.dark-theme .info-card, 
+.dark-theme .membre-top, 
+.dark-theme .table-container, 
+.dark-theme .formation-wrapper,
+.dark-theme .stat-card-avatar {
+  background: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-main) !important;
+}
+
+/* Soratra ao anaty Karatra */
+.dark-theme .info-card h3, 
+.dark-theme .info-card p,
+.dark-theme .stat-label,
+.dark-theme .avatar-count,
+.dark-theme .user-name {
+  color: var(--text-main) !important;
+}
+
+/* Ny Tabilao (Table) */
+.dark-theme .membre-table th,
+.dark-theme .formation-table th,
+.dark-theme .table-respo th {
+  background: #334155 !important; /* Loko lohateny tabilao maizina */
+  color: #60a5fa !important;     /* Soratra manga mazava */
+}
+
+.dark-theme .membre-table td,
+.dark-theme .formation-table td,
+.dark-theme .table-respo td {
+  color: var(--text-main) !important;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dark-theme .membre-table tr:hover {
+  background-color: #334155 !important;
+}
+
+/* Input sy Search Box */
+.dark-theme .search-box input,
+.dark-theme .form-control-premium,
+.dark-theme .form-group input,
+.dark-theme .form-group select {
+  background-color: #0f172a !important;
+  color: white !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+/* Modals */
+.dark-theme .modal-content-premium,
+.dark-theme .modal-content,
+.dark-theme .wide-modal {
+  background: var(--bg-card) !important;
+  color: var(--text-main) !important;
+}
+
+.dark-theme .modal-header-lite,
+.dark-theme .modal-header-premium,
+.dark-theme .modal-footer-premium {
+  background: #0f172a !important;
+  border-color: var(--border-color);
+}
+
+/* Footer */
+.dark-theme .main-footer {
+  background-color: #020617 !important;
+  border-top: 1px solid var(--border-color);
+}
+
+/* --- FANITSIAINA NY GENRE AO AMIN'NY DARK MODE --- */
+.dark-theme .avatar-container {
+  background: transparent !important; /* Esory ny loko maintso rehetra */
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Raha misy zavatra miteraka an'ilay boribory maintso */
+.dark-theme .avatar-item {
+  background: transparent !important;
+}
+
+/* Ataovy azo antoka fa tsy misy loko background ny divider */
+.dark-theme .avatar-divider {
+  background-color: var(--border-color) !important;
+  width: 1px;
+  height: 30px;
+}
+
+/* --- FANITSIANA MANOKANA NY FORMATION TABLE --- */
+
+.dark-theme .formation-table td {
+  background-color: transparent !important; /* Terena ho transparent */
+  color: var(--text-main) !important;
+}
+
+.dark-theme .formation-table tbody tr:hover {
+  background-color: rgba(96, 165, 250, 0.15) !important; /* Manga mangarahara mifanaraka amin'ny th */
+  cursor: pointer;
+}
+
+/* 3. Raha misy fotsy mangirana be amin'ny sela tsirairay */
+.dark-theme .formation-table tr {
+  background-color: transparent !important;
+}
+
+
+.dark-theme .formation-table th {
+  background:  rgba(96, 165, 250, 0.15) !important; /* Background mazava */
+  color: #f8f9fa !important;      /* Soratra mainty */
+  border-bottom: 2px solid var(--border-color);
+}
+
+/* ============================================================
+   RESPONSIVE ANDROID COMPLETE
+   ============================================================ */
+
+   @media (max-width: 992px) {
+    :root {
+      --sidebar-w: 260px;
+    }
+    
+    .info-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    /* --- 1. LAYOUT ANKAPOBENY --- */
+    .dashboard-container {
+      overflow-x: hidden;
+    }
+  
+    .main-content, .main-content-landing {
+      padding: 15px !important;
+      overflow-x: hidden;
+    }
+  
+    /* Navbar: Ahena ny fahasarotany */
+    .user-info, .nav-title span:last-child {
+      display: none; /* Afenina ny soratra mavesatra */
+    }
+  
+    .nav-logo {
+      height: 35px;
+    }
+  
+    /* Sidebar: Manarona ny efijery (Overlay style) */
+    .main-sidebar {
+      position: fixed;
+      top: 0;
+      height: 100vh;
+      width: 80%;
+      max-width: 300px;
+      box-shadow: 20px 0 50px rgba(0,0,0,0.3);
+    }
+  
+    /* --- 2. DASHBOARD & HERO --- */
+    .hero-banner {
+      flex-direction: column;
+      text-align: center;
+      padding: 30px 20px;
+    }
+  
+    .hero-content {
+      max-width: 100%;
+      margin-bottom: 20px;
+    }
+  
+    .hero-banner h2 {
+      font-size: 1.8rem !important;
+    }
+  
+    .hero-illustration {
+      width: 160px;
+      height: 160px;
+    }
+  
+    .info-grid {
+      grid-template-columns: 1fr; /* Karatra iray isaky ny andalana */
+    }
+  
+    .statistics-grid {
+      grid-template-columns: repeat(2, 1fr); /* Statistics mizara roa */
+      gap: 10px;
+    }
+  
+    /* --- 3. TABLE TO CARD (Ny Tabilao mivadika Karatra) --- */
+    /* Ity no manova ny Membre sy Formation ho Android list */
+    .table-container, .formation-wrapper, .table-respo, .membre-table, .formation-table {
+      display: block;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+      max-height: none !important;
+    }
+  
+    .table-respo thead, .membre-table thead, .formation-table thead {
+      display: none; /* Afenina ny lohateny mitsivalana */
+    }
+  
+    .table-respo tr, .membre-table tr, .formation-table tr {
+      display: block;
+      background: white;
+      margin-bottom: 15px;
+      border-radius: 15px;
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    }
+  
+    .table-respo td, .membre-table td, .formation-table td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 5px !important;
+      border-bottom: 1px solid #f8fafc !important;
+      width: 100% !important;
+      text-align: right !important;
+      min-height: 40px;
+    }
+  
+    /* Rehefa mampiasa React, ampio 'data-label' ny <td> tsirairay */
+    .table-respo td::before, .membre-table td::before, .formation-table td::before {
+      content: attr(data-label);
+      font-weight: 700;
+      color: #64748b;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      text-align: left;
+      flex: 1;
+    }
+  
+    /* Ny tsanganana Actions (Edit/Delete) */
+    .col-actions, .col-action-btn, .action-icons {
+      justify-content: center !important;
+      border-bottom: none !important;
+      margin-top: 10px;
+      gap: 20px !important;
+    }
+  
+    /* --- 4. MODAL RESPONSIVE --- */
+    .modal-content, .modal-content-premium, .premium-modal {
+      width: 95% !important;
+      max-height: 90vh;
+      border-radius: 20px !important;
+      position: fixed;
+      bottom: 10px; /* Hiakatra kely avy any ambany toy ny Android Sheets */
+    }
+  
+    .premium-form, .premium-grid-2, .form-flex-container {
+      grid-template-columns: 1fr !important; /* Andalana iray daholo ny inputs */
+      display: block !important;
+      padding: 15px !important;
+    }
+  
+    .form-group, .form-group-modern {
+      margin-bottom: 15px;
+    }
+  
+    .modal-buttons, .modal-footer-premium, .modal-footer-right {
+      flex-direction: column-reverse; /* Ny 'Annuler' any ambany ny 'Save' */
+      gap: 10px !important;
+    }
+  
+    .btn-save, .btn-creer, .btn-cancel, .btn-annuler {
+      width: 100% !important;
+      padding: 14px !important;
+      justify-content: center;
+    }
+  }
+  
+
+  @media (max-width: 480px) {
+    .statistics-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .hero-banner h2 {
+      font-size: 1.5rem !important;
+    }
+  }
