@@ -62,7 +62,7 @@ export default function Register({ onMessage, onSwitch }) {
             <label className="input-label">Email</label>
             <div className="input-relative">
               <span className="input-icon"><FaEnvelope /></span>
-              <input type="email" className="custom-input" placeholder="admin@taf.mg" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <input type="email" className="custom-input" placeholder="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@ export default function Register({ onMessage, onSwitch }) {
             <label className="input-label">Mot de passe</label>
             <div className="input-relative">
               <span className="input-icon"><FaLock /></span>
-              <input type="password" className="custom-input" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <input type="password" className="custom-input" placeholder="Mot de passe" value={password} onChange={(e) => setPassword(e.target.value)} required />
             </div>
           </div>
           <div className="input-group">

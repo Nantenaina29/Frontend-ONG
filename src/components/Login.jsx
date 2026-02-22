@@ -47,10 +47,10 @@ export default function Login({ onSwitch, onLoginSuccess }) {
       input: 'email',
       inputPlaceholder: 'Votre email',
       showCancelButton: true,
-      confirmButtonText: 'Envoyer',
       cancelButtonText: 'Annuler',
-      confirmButtonColor: '#10b981',
+      confirmButtonText: 'Envoyer',  
       cancelButtonColor: '#d33',
+      confirmButtonColor: '#10b981',
       showLoaderOnConfirm: true,
       preConfirm: async (emailValue) => {
         try {
@@ -102,7 +102,7 @@ export default function Login({ onSwitch, onLoginSuccess }) {
             <input
               type="email"
               className="custom-input"
-              placeholder="admin@taf.mg"
+              placeholder="Adresse email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -120,7 +120,7 @@ export default function Login({ onSwitch, onLoginSuccess }) {
             <input
               type="password"
               className="custom-input"
-              placeholder="••••••••"
+              placeholder="Mot de passe"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

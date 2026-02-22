@@ -32,14 +32,14 @@
   
 }
 
-/* Container an'ny nav-right */
+
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 20px; /* Elanelana eo amin'ny icons sy profil */
+  gap: 20px; 
 }
 
-/* Style ho an'ny bokotra icons (Dark mode, Settings) */
+
 .nav-icon-btn {
   background: none;
   border: none;
@@ -79,8 +79,8 @@
 
 /* Avatar */
 .user-avatar, .user-avatar-placeholder {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
   color: #999;
@@ -1843,7 +1843,7 @@ input[type="date"] {
       max-height: 90vh;
       border-radius: 20px !important;
       position: fixed;
-      bottom: 10px; /* Hiakatra kely avy any ambany toy ny Android Sheets */
+      bottom: 10px; 
     }
   
     .premium-form, .premium-grid-2, .form-flex-container {
