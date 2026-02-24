@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: 'https://backend-ong-qarl.onrender.com', 
+  baseURL: 'https://backend-ong-qarl.onrender.com/api',
   withCredentials: true,
   headers: {
     "Accept": "application/json",
