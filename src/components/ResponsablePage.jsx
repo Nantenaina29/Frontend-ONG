@@ -209,9 +209,9 @@ const exportFemmesBureauPDF = async () => {
     if (!selectedRespo) return;
 
     try {
-        await axiosClient.put(`http://localhost:8000/api/responsables/${selectedRespo.CodeRespo}`, {
-            Poste: newPoste
-        });
+      await axiosClient.put(`/api/responsables/${selectedRespo.CodeRespo}`, {
+        Poste: newPoste
+    });
 
         // Tsy mila miantso fetchResponsables() intsony
         const updatedList = responsables.map((r) => {
