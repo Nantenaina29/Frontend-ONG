@@ -2,7 +2,7 @@
 
     const axiosClient = axios.create({
       // Ity no baseURL ho an'ny fonction rehetra (Login, Register, sns.)
-      baseURL: 'https://backend-ong-qarl.onrender.com/api', 
+      baseURL: 'https://backend-ong-qarl.onrender.com', 
       withCredentials: true,
       headers: {
         "Accept": "application/json",
