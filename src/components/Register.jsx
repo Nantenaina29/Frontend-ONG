@@ -23,7 +23,7 @@ export default function Register({ onMessage, onSwitch }) {
     setLoading(true);
     try {
       await axiosClient.get("https://backend-ong-qarl.onrender.com/sanctum/csrf-cookie");
-      await axiosClient.post("/register", { name, email, password, pincode });
+      await axiosClient.post("/api/register", { name, email, password, pincode });
       onMessage("Compte créé avec succès ! Connectez-vous.", "success");
       onSwitch();
     } catch (err) {
