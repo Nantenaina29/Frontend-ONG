@@ -1,5 +1,5 @@
 import { useState } from "react";
-//import axiosClient from "../axiosClient";
+import axiosClient from "../axiosClient";
 import "../style.css";
 import { FaUser, FaEnvelope, FaLock, FaKey, FaUserPlus } from "react-icons/fa";
 
@@ -14,31 +14,28 @@ export default function Register({ onMessage, onSwitch }) {
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+    setLocalMessage({ text: "", type: "" });
+  
+    if (!name || !email || !password || !pincode) {
+      setLocalMessage({ text: "Remplissez tous les champs.", type: "error" });
+      return;
+    }
+  
     try {
-      // 1. CSRF - direct fetch NO axiosClient
-      await fetch(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`, {
-        credentials: 'include'
+      const response = await axiosClient.post('/api/register', { 
+        name, email, password, pincode 
       });
       
-      // 2. Register - direct fetch NO axiosClient  
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ name, email, password, pincode })
-      });
+      console.log('✅ REGISTER:', response.data);
       
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || 'Erreur');
-      }
-      
-      onMessage("✅ Compte créé !", "success");
-      onSwitch();
+      // NO TOKEN HO AN'NY REGISTER (public) - login ihany
+      onMessage("✅ Compte créé ! Connectez-vous maintenant.", "success");
+      onSwitch(); // switch to login
       
     } catch (err) {
-      setLocalMessage({ text: err.message, type: "error" });
+      console.error('❌ ERROR:', err.response?.data);
+      const message = err.response?.data?.message || "Erreur inscription";
+      setLocalMessage({ text: message, type: "error" });
     } finally {
       setLoading(false);
     }
