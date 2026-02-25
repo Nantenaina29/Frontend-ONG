@@ -14,44 +14,31 @@ export default function Register({ onMessage, onSwitch }) {
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setLocalMessage({ text: "", type: "" });
     
     try {
-      console.log('🔄 Starting registration...');
-      
-      // 1. CSRF COOKIE - IHANY REHATRA
-      console.log('→ 1. GET /sanctum/csrf-cookie');
-      const csrfRes = await fetch(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`, {
-        method: 'GET',
+      // 1. CSRF - direct fetch NO axiosClient
+      await fetch(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`, {
         credentials: 'include'
       });
-      console.log('CSRF Status:', csrfRes.status);
       
-      // 2. REGISTER - IHANY REHATRA
-      console.log('→ 2. POST /register');
-      const registerRes = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
+      // 2. Register - direct fetch NO axiosClient  
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest',
-        },
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ name, email, password, pincode })
       });
       
-      const data = await registerRes.json();
-      console.log('✅ REGISTER SUCCESS:', data);
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || 'Erreur');
+      }
       
-      onMessage("Compte créé avec succès ! Connectez-vous.", "success");
+      onMessage("✅ Compte créé !", "success");
       onSwitch();
       
     } catch (err) {
-      console.error('❌ ERROR:', err);
-      setLocalMessage({ 
-        text: err.message || "Erreur lors de l'inscription !", 
-        type: "error" 
-      });
+      setLocalMessage({ text: err.message, type: "error" });
     } finally {
       setLoading(false);
     }
