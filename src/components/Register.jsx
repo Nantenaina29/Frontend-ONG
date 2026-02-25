@@ -13,41 +13,34 @@ export default function Register({ onMessage, onSwitch }) {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setLocalMessage({ text: "", type: "" });
-  
-    if (!name || !email || !password || !pincode) {
-      setLocalMessage({ text: "Veuillez remplir tous les champs.", type: "error" });
-      return;
-    }
-  
     setLoading(true);
     
     try {
-      // ← INTERCEPTOR MANAO CSRF AUTOMATIKALY - ESAO NY MANUAL
-      const response = await axiosClient.post("/register", { 
-        name, 
-        email, 
-        password, 
-        pincode 
+      // 1. CSRF COOKIE
+      await axiosClient.get(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`, {
+        withCredentials: true
       });
       
-      console.log('Register response:', response.data); // DEBUG
+      // 2. REGISTER (web.php route)
+      const response = await axiosClient.post("/register", { 
+        name, email, password, pincode 
+      });
       
-      onMessage("Compte créé avec succès ! Connectez-vous.", "success");
+      console.log('SUCCESS:', response.data);
+      onMessage("Compte créé ! Connectez-vous.", "success");
       onSwitch();
       
     } catch (err) {
-      console.error('Register error:', err.response); // DEBUG
-      
-      const errorMessage = err.response?.data?.message || 
-                          err.response?.data?.error || 
-                          "Erreur lors de l'inscription !";
-      
-      setLocalMessage({ text: errorMessage, type: "error" });
+      console.error('ERROR:', err.response?.status, err.response?.data);
+      setLocalMessage({ 
+        text: err.response?.data?.message || "Erreur inscription", 
+        type: "error" 
+      });
     } finally {
       setLoading(false);
     }
   };
+  
   
   return (
     <div className="form-wrapper register-wrapper">

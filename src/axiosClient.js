@@ -10,29 +10,28 @@ const axiosClient = axios.create({
   }
 });
 
-// INTERCEPTOR SIMPLES - TSY MISY TRY/CATCH
 axiosClient.interceptors.request.use(async (config) => {
-  // CSRF COOKIE HO AN'NY POST/PUT/DELETE (Sanctum)
+  // CSRF HO AN'NY PROTECTED ROUTES IHANY (TSY REGISTER)
   const method = config.method?.toLowerCase();
-  if (['post', 'put', 'delete', 'patch'].includes(method)) {
-    // GET CSRF COOKIE - 204 normal raha efa misy
+  if (['post', 'put', 'delete', 'patch'].includes(method) && 
+      config.url.includes('/api') &&  // ← API ROUTES IHANY
+      !config.url.includes('/sanctum/csrf-cookie')) {
+    
     await axios.get(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`, {
       withCredentials: true
-    });
+    }).catch(() => {});
   }
 
-  // API TOKEN raha misy (backup)
-  const token = localStorage.getItem("ACCESS_TOKEN"); 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
-  // API PREFIX
-  if (!config.url.includes('/sanctum/csrf-cookie') && !config.url.startsWith('/api')) {
+  // API PREFIX HO API ROUTES IHANY
+  if (!config.url.includes('/sanctum/csrf-cookie') && 
+      !config.url.includes('/register') && 
+      !config.url.includes('/login') &&
+      !config.url.startsWith('/api')) {
     config.url = `/api${config.url.startsWith('/') ? '' : '/'}${config.url}`;
   }
 
   return config;
 });
+
 
 export default axiosClient;
