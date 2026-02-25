@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axiosClient from "../axiosClient";
+//import axiosClient from "../axiosClient";
 import "../style.css";
 import { FaUser, FaEnvelope, FaLock, FaKey, FaUserPlus } from "react-icons/fa";
 
@@ -17,33 +17,45 @@ export default function Register({ onMessage, onSwitch }) {
     setLocalMessage({ text: "", type: "" });
     
     try {
-      // 1. CSRF COOKIE - IHANY IZAY
-      console.log('→ GET /sanctum/csrf-cookie');
-      await axiosClient.get(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true
+      console.log('🔄 Starting registration...');
+      
+      // 1. CSRF COOKIE - IHANY REHATRA
+      console.log('→ 1. GET /sanctum/csrf-cookie');
+      const csrfRes = await fetch(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`, {
+        method: 'GET',
+        credentials: 'include'
+      });
+      console.log('CSRF Status:', csrfRes.status);
+      
+      // 2. REGISTER - IHANY REHATRA
+      console.log('→ 2. POST /register');
+      const registerRes = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ name, email, password, pincode })
       });
       
-      // 2. REGISTER - IHANY IZAY
-      console.log('→ POST /register');
-      const response = await axiosClient.post("/register", { 
-        name, email, password, pincode 
-      });
+      const data = await registerRes.json();
+      console.log('✅ REGISTER SUCCESS:', data);
       
-      console.log('SUCCESS:', response.data);
-      onMessage("Compte créé ! Connectez-vous.", "success");
+      onMessage("Compte créé avec succès ! Connectez-vous.", "success");
       onSwitch();
       
     } catch (err) {
-      console.error('❌ ERROR:', err.response?.status, err.response?.data);
+      console.error('❌ ERROR:', err);
       setLocalMessage({ 
-        text: err.response?.data?.message || `Erreur ${err.response?.status}`, 
+        text: err.message || "Erreur lors de l'inscription !", 
         type: "error" 
       });
     } finally {
       setLoading(false);
     }
   };
-  
   
   
   return (
