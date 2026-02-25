@@ -23,7 +23,7 @@ export default function Login({ onSwitch, onLoginSuccess }) {
     setLoading(true);
     try {
       await axiosClient.get("https://backend-ong-qarl.onrender.com/sanctum/csrf-cookie");
-      const res = await axiosClient.post("/api/login", { email, password });
+      const res = await axiosClient.post("/login", { email, password });
 
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);
