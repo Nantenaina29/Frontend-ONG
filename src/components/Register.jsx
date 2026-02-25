@@ -14,30 +14,41 @@ export default function Register({ onMessage, onSwitch }) {
   const handleRegister = async (e) => {
     e.preventDefault();
     setLocalMessage({ text: "", type: "" });
-
+  
     if (!name || !email || !password || !pincode) {
       setLocalMessage({ text: "Veuillez remplir tous les champs.", type: "error" });
       return;
     }
-
+  
     setLoading(true);
+    
     try {
-      await axiosClient.get("https://backend-ong-qarl.onrender.com/sanctum/csrf-cookie", {
-        withCredentials: true
-    });
-      await axiosClient.post("/api/register", { name, email, password, pincode });
+      // ← INTERCEPTOR MANAO CSRF AUTOMATIKALY - ESAO NY MANUAL
+      const response = await axiosClient.post("/register", { 
+        name, 
+        email, 
+        password, 
+        pincode 
+      });
+      
+      console.log('Register response:', response.data); // DEBUG
+      
       onMessage("Compte créé avec succès ! Connectez-vous.", "success");
       onSwitch();
+      
     } catch (err) {
-      setLocalMessage({ 
-        text: err.response?.data?.message || "Erreur lors de l'inscription !", 
-        type: "error" 
-      });
+      console.error('Register error:', err.response); // DEBUG
+      
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          "Erreur lors de l'inscription !";
+      
+      setLocalMessage({ text: errorMessage, type: "error" });
     } finally {
       setLoading(false);
     }
   };
-
+  
   return (
     <div className="form-wrapper register-wrapper">
       <div className="form-header">

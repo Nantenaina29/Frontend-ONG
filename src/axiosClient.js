@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  // Tsy asiana /api eto mba handehanan'ny CSRF mivantana
-  baseURL: 'https://backend-ong-qarl.onrender.com', 
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
   headers: {
     "Accept": "application/json",
@@ -11,16 +10,24 @@ const axiosClient = axios.create({
   }
 });
 
-axiosClient.interceptors.request.use((config) => {
-  // 1. Manampy Token raha misy
+// INTERCEPTOR SIMPLES - TSY MISY TRY/CATCH
+axiosClient.interceptors.request.use(async (config) => {
+  // CSRF COOKIE HO AN'NY POST/PUT/DELETE (Sanctum)
+  const method = config.method?.toLowerCase();
+  if (['post', 'put', 'delete', 'patch'].includes(method)) {
+    // GET CSRF COOKIE - 204 normal raha efa misy
+    await axios.get(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`, {
+      withCredentials: true
+    });
+  }
+
+  // API TOKEN raha misy (backup)
   const token = localStorage.getItem("ACCESS_TOKEN"); 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
-  // 2. LOGIQUE AUTOMATIQUE:
-  // Raha tsy csrf-cookie no antsoina, dia asiana "/api" eo alohan'ny URL
-  // Izany dia miantoka fa ny membres, login, sns dia mbola mandeha foana
+  // API PREFIX
   if (!config.url.includes('/sanctum/csrf-cookie') && !config.url.startsWith('/api')) {
     config.url = `/api${config.url.startsWith('/') ? '' : '/'}${config.url}`;
   }
