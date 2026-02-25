@@ -11,10 +11,10 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(async (config) => {
-  // CSRF HO AN'NY PROTECTED ROUTES IHANY (TSY REGISTER)
+  // CSRF HO AN'NY PROTECTED API ROUTES IHANY
   const method = config.method?.toLowerCase();
   if (['post', 'put', 'delete', 'patch'].includes(method) && 
-      config.url.includes('/api') &&  // ← API ROUTES IHANY
+      config.url.startsWith('/api') &&  // ← API ROUTES IHANY
       !config.url.includes('/sanctum/csrf-cookie')) {
     
     await axios.get(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`, {

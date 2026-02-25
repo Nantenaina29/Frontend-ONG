@@ -14,14 +14,17 @@ export default function Register({ onMessage, onSwitch }) {
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setLocalMessage({ text: "", type: "" });
     
     try {
-      // 1. CSRF COOKIE
+      // 1. CSRF COOKIE - IHANY IZAY
+      console.log('→ GET /sanctum/csrf-cookie');
       await axiosClient.get(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`, {
         withCredentials: true
       });
       
-      // 2. REGISTER (web.php route)
+      // 2. REGISTER - IHANY IZAY
+      console.log('→ POST /register');
       const response = await axiosClient.post("/register", { 
         name, email, password, pincode 
       });
@@ -31,15 +34,16 @@ export default function Register({ onMessage, onSwitch }) {
       onSwitch();
       
     } catch (err) {
-      console.error('ERROR:', err.response?.status, err.response?.data);
+      console.error('❌ ERROR:', err.response?.status, err.response?.data);
       setLocalMessage({ 
-        text: err.response?.data?.message || "Erreur inscription", 
+        text: err.response?.data?.message || `Erreur ${err.response?.status}`, 
         type: "error" 
       });
     } finally {
       setLoading(false);
     }
   };
+  
   
   
   return (
