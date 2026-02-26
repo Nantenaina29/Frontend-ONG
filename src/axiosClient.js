@@ -1,9 +1,8 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://backend-ong-qarl.onrender.com/api';
-
 const axiosClient = axios.create({
-  baseURL: API_URL,  // ← VITE_API_URL!
+  // 🎯 BACKEND URL DIRECT (tsy /api - Laravel routes)
+  baseURL: 'https://backend-ong-qarl.onrender.com',
   timeout: 15000,
   headers: { 
     "Content-Type": "application/json",
@@ -11,7 +10,7 @@ const axiosClient = axios.create({
   }
 });
 
-// Bearer token + 401 logout (efa soa)
+// 🔐 BEARER TOKEN HO AN'NY PROTECTED ROUTES
 axiosClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("ACCESS_TOKEN");
   if (token) {
@@ -20,12 +19,16 @@ axiosClient.interceptors.request.use((config) => {
   return config;
 });
 
+// 🚪 401 AUTO-LOGOUT + CLEANUP
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      // Clear token + user
       localStorage.removeItem("ACCESS_TOKEN");
       localStorage.removeItem("user");
+      
+      // Miverina amin'ny MainPage
       window.location.hash = "home";
     }
     return Promise.reject(error);
