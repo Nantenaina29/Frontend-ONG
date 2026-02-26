@@ -20,18 +20,13 @@ export default function App() {
     setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
   };
 
-  // App.jsx
-const handleLoginSuccess = (userData) => {
-  // 1. Tehirizina ao amin'ny state
-  setUser(userData);
-  
-  // 2. TEHIRIZINA AO AMIN'NY STORAGE (Zava-dehibe!)
-  localStorage.setItem("user", JSON.stringify(userData));
-  
-  // 3. Ovaina ny pejy
-  setPage("dashboard");
-  window.location.hash = "dashboard";
-};
+
+      const handleLoginSuccess = (userData) => {
+        setUser(userData);
+        // Fafao ity: window.location.hash = "dashboard"; (Izy ity no mampi-flicker azy)
+        setPage("dashboard");
+        setMessage({ text: "Connexion réussie !", type: "success" });
+      };
 
           const handleLogout = () => {
             localStorage.removeItem("ACCESS_TOKEN");
