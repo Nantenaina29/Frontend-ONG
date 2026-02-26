@@ -5,10 +5,10 @@ import Dashboard from "./components/Dashboard";
 import "./style.css"; 
 
 export default function App() {
-  // 1. States - HOME no default fa tsy misy hash intsony
-  const [message, setMessage] = useState({ text: "", type: "success" });
+  // 1. States - Rehefa mi-refresh ny browser, miverina amin'ireto sanda ireto foana
   const [page, setPage] = useState("home"); 
   const [user, setUser] = useState(null);
+  const [message, setMessage] = useState({ text: "", type: "success" });
 
   const handleMessage = (msg, type = "success") => {
     setMessage({ text: msg, type: type });
@@ -16,36 +16,31 @@ export default function App() {
   };
 
   const handleLoginSuccess = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
+    // Tsy asiana localStorage.setItem intsony eto
     setUser(userData);
-    setPage("dashboard"); // Mifindra Dashboard rehefa mahomby ny Login
+    setPage("dashboard"); 
     handleMessage("Connexion réussie !", "success");
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("ACCESS_TOKEN");
-    localStorage.removeItem("user");
+    // Diovina fotsiny ny state fa tsy mila mikitika localStorage
     setUser(null);
-    setPage("home"); // Miverina Home rehefa mivoaka
+    setPage("home");
   };
 
-  const handleGoToLogin = () => {
-    setPage("login"); 
-  };
-
-  // ✅ LOGIQUE A: RAHA DASHBOARD NA HOME (satria ny Dashboard no mitantana ny MainPage)
-  if (page === "dashboard" || page === "home") {
+  // ✅ LOGIQUE A: RAHA TAFIDITRA (Dashboard feno)
+  if (page === "dashboard" && user) {
     return (
       <Dashboard 
         user={user} 
         setUser={setUser} 
         onLogout={handleLogout} 
-        onGoToLogin={handleGoToLogin} 
+        onGoToLogin={() => setPage("login")} 
       />
     );
   }
 
-  // ✅ LOGIQUE B: RAHA LOGIN NA REGISTER
+  // ✅ LOGIQUE B: RAHA MBOLA TSY TAFIDITRA (Home, Login, na Register)
   return (
     <div className="login-page">
       <div className="brand-panel">
@@ -75,10 +70,15 @@ export default function App() {
               onLoginSuccess={handleLoginSuccess} 
               onBackToHome={() => setPage("home")} 
             />
-          ) : (
+          ) : page === "register" ? (
             <Register 
               onSwitch={() => setPage("login")} 
               onMessage={handleMessage} 
+            />
+          ) : (
+            <Dashboard 
+              activePage="home" 
+              onGoToLogin={() => setPage("login")} 
             />
           )}
         </div>
