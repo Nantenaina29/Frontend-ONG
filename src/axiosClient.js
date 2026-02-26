@@ -24,15 +24,15 @@ axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Clear token + user
+
+      console.log('🔐 Token expired - auto-logout');
       localStorage.removeItem("ACCESS_TOKEN");
       localStorage.removeItem("user");
-      
-      // Miverina amin'ny MainPage
-      window.location.hash = "home";
+      window.location.hash = "home";  // ← Frontend navigation ihany!
     }
     return Promise.reject(error);
   }
 );
+
 
 export default axiosClient;
