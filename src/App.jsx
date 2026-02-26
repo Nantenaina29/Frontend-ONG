@@ -1,53 +1,40 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
 import "./style.css"; 
 
 export default function App() {
-  
+  // 1. States - HOME no default fa tsy misy hash intsony
   const [message, setMessage] = useState({ text: "", type: "success" });
-  const [page, setPage] = useState(window.location.hash.replace('#', '') || "home");
- 
+  const [page, setPage] = useState("home"); 
   const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    window.location.hash = page;
-}, [page]);
 
   const handleMessage = (msg, type = "success") => {
     setMessage({ text: msg, type: type });
     setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
   };
 
+  const handleLoginSuccess = (userData) => {
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
+    setPage("dashboard"); // Mifindra Dashboard rehefa mahomby ny Login
+    handleMessage("Connexion réussie !", "success");
+  };
 
-// App.jsx
-    const handleLoginSuccess = (userData) => {
-      // 1. Tehirizo ho hita manerana ny browser ny user
-      localStorage.setItem("user", JSON.stringify(userData));
-      
-      // 2. Update state
-      setUser(userData);
-      
-      // 3. Ovaina ny pejy (Dashboard ihany, aza asiana hash hafa)
-      setPage("dashboard");
-      setMessage({ text: "Connexion réussie !", type: "success" });
-    };
+  const handleLogout = () => {
+    localStorage.removeItem("ACCESS_TOKEN");
+    localStorage.removeItem("user");
+    setUser(null);
+    setPage("home"); // Miverina Home rehefa mivoaka
+  };
 
-          const handleLogout = () => {
-            localStorage.removeItem("ACCESS_TOKEN");
-            localStorage.removeItem("user"); // Fadio koa ny user ao amin'ny storage
-            setUser(null);
-            setPage("login"); // Na inona na inona anaran'ny pejy fidirana ao aminao
-          };
+  const handleGoToLogin = () => {
+    setPage("login"); 
+  };
 
-          // AMPY ITY FONCTION ITY:
-          const handleGoToLogin = () => {
-            setPage("login"); 
-          };
-
-  // 2. Raha eo amin'ny Dashboard (na Landing Page na Statistiques)
-  if (page === "dashboard") {
+  // ✅ LOGIQUE A: RAHA DASHBOARD NA HOME (satria ny Dashboard no mitantana ny MainPage)
+  if (page === "dashboard" || page === "home") {
     return (
       <Dashboard 
         user={user} 
@@ -58,10 +45,9 @@ export default function App() {
     );
   }
 
-  // 3. Raha eo amin'ny Login na Register
+  // ✅ LOGIQUE B: RAHA LOGIN NA REGISTER
   return (
     <div className="login-page">
-      {/* PANEL ANKAVIA - Brand Content */}
       <div className="brand-panel">
         <div className="brand-content">
           <img src="/Logo TAF 3D.png" alt="Logo TAF3D" className="brand-logo" />
@@ -75,7 +61,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* PANEL ANKAVANANA - Auth Forms */}
       <div className="form-panel">
         <div className="auth-dynamic-content">
           {message.text && (
@@ -88,7 +73,7 @@ export default function App() {
             <Login 
               onSwitch={() => setPage("register")} 
               onLoginSuccess={handleLoginSuccess} 
-              onBackToHome={() => setPage("dashboard")} 
+              onBackToHome={() => setPage("home")} 
             />
           ) : (
             <Register 
