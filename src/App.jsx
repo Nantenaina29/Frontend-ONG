@@ -20,11 +20,14 @@ export default function App() {
     setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
   };
 
-  const handleLoginSuccess = (userData) => {
-    setUser(userData);
-    setPage("dashboard"); // Miverina amin'ny Dashboard rehefa tafiditra
-    setMessage({ text: "", type: "success" });
-  };
+// App.jsx
+const handleLoginSuccess = (userData) => {
+  setUser(userData);
+  // Ataovy azo antoka fa voafafa ny hash taloha mba tsy hisy conflict
+  window.location.hash = "dashboard"; 
+  setPage("dashboard");
+  setMessage({ text: "Connexion réussie !", type: "success" });
+};
 
 
 
