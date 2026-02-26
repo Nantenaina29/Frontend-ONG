@@ -30,6 +30,8 @@ export default function Dashboard({ user, setUser, onLogout, onGoToLogin }) {
   useEffect(() => {
     if (user) {
       setActivePage("statistiques");
+    } else {
+      setActivePage("home");
     }
   }, [user]);
 
