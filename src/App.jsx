@@ -30,7 +30,7 @@ export default function App() {
       setUser(userData);
       
       // 3. Ovaina ny pejy (Dashboard ihany, aza asiana hash hafa)
-      setPage("dashboard");
+      setPage("statistiques");
       setMessage({ text: "Connexion réussie !", type: "success" });
     };
 
