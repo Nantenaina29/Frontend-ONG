@@ -20,34 +20,27 @@ import AdminNotifications from "./AdminNotifications";
 import TrashPage from "./TrashPage";
 import SettingsPage from "./SettingsPage";
 
-// Dashboard.jsx
-
 export default function Dashboard({ user, setUser, onLogout, onGoToLogin }) {
-  // VAHAOLANA PERFECT: 
-  // Jerena raha efa misy token ao amin'ny localStorage vao mametraka ny sanda voalohany
-  const [activePage, setActivePage] = useState(() => {
-    const hasToken = localStorage.getItem("ACCESS_TOKEN");
-    return (user || hasToken) ? "statistiques" : "home";
-  });
 
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [activePage, setActivePage] = useState(user ? "statistiques" : "home");
+const [sidebarOpen, setSidebarOpen] = useState(false);
+const [darkMode, setDarkMode] = useState(false);
 
-  // Ity EFFECT ity no manery ny pejy ho "statistiques" raha vao mahomby ny Login
-  useEffect(() => {
-    if (user) {
-      setActivePage("statistiques");
-    }
-  }, [user]);
+useEffect(() => {
+  if (user && activePage === "home") {
+    setActivePage("statistiques");
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [user]);
 
-  // Ity EFFECT faharoa ity dia miantoka fa raha misy ACCESS_TOKEN dia tsy miverina "home" intsony
-  useEffect(() => {
-    const token = localStorage.getItem("ACCESS_TOKEN");
-    if (token && activePage === "home") {
-      setActivePage("statistiques");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+useEffect(() => {
+  const token = localStorage.getItem("ACCESS_TOKEN");
+  if (token) {
+    setActivePage("statistiques");
+  }
+}, []);  
+
 
   const handleConfirmLogout = () => {
     Swal.fire({

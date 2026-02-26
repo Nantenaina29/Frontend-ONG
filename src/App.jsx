@@ -20,23 +20,19 @@ export default function App() {
     setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
   };
 
-// App.jsx
-
-    const handleLoginSuccess = (userData) => {
-      // 1. Tehirizina ny user state
-      setUser(userData);
-      
-      // 2. Terena ho any amin'ny dashboard ny hash
-      window.location.hash = "dashboard"; 
-      
-      // 3. Ovaina ny pejy
-      setPage("dashboard");
-      
-      // 4. Hafatra fahombiazana
-      setMessage({ text: "Connexion réussie !", type: "success" });
-    };
-
-
+  const handleLoginSuccess = (userData) => {
+    setUser(userData);
+    
+    // ← MANOVA IO - Dashboard + Statistique direct
+    window.location.hash = "dashboard#statistiques"; 
+    setPage("dashboard");
+    
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("ACCESS_TOKEN", localStorage.getItem("ACCESS_TOKEN")); // backup
+    
+    setMessage({ text: "Connexion réussie !", type: "success" });
+  };
+  
 
 // App.jsx
 
