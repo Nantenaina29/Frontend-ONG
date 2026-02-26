@@ -21,12 +21,18 @@ export default function App() {
   };
 
 
-      const handleLoginSuccess = (userData) => {
-        setUser(userData);
-        // Fafao ity: window.location.hash = "dashboard"; (Izy ity no mampi-flicker azy)
-        setPage("dashboard");
-        setMessage({ text: "Connexion réussie !", type: "success" });
-      };
+// App.jsx
+const handleLoginSuccess = (userData) => {
+  // 1. Tehirizo ho hita manerana ny browser ny user
+  localStorage.setItem("user", JSON.stringify(userData));
+  
+  // 2. Update state
+  setUser(userData);
+  
+  // 3. Ovaina ny pejy (Dashboard ihany, aza asiana hash hafa)
+  setPage("dashboard");
+  setMessage({ text: "Connexion réussie !", type: "success" });
+};
 
           const handleLogout = () => {
             localStorage.removeItem("ACCESS_TOKEN");
