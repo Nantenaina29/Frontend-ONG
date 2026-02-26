@@ -15,16 +15,26 @@ export default function App() {
 
  
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const token = localStorage.getItem("ACCESS_TOKEN");
+    const checkLoggedUser = () => {
+      const storedUser = localStorage.getItem("user");
+      const token = localStorage.getItem("ACCESS_TOKEN");
   
-    if (storedUser && token) {
-      setUser(JSON.parse(storedUser));
-      setPage("dashboard");
-    } else {
-      setPage("login");
-    }
-    
+      if (storedUser && token) {
+        try {
+          setUser(JSON.parse(storedUser));
+          setPage("dashboard");
+        } catch (error) {
+          console.error("Erreur JSON parse:", error);
+          localStorage.removeItem("user");
+          setPage("login");
+        }
+      } else {
+        setPage("login");
+      }
+    };
+  
+    checkLoggedUser();
+    // Ity ambany ity no manala ny menamena rehetra
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
