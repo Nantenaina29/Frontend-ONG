@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosClient = axios.create({
   // 🎯 BACKEND URL DIRECT (tsy /api - Laravel routes)
-  baseURL: 'https://backend-ong-qarl.onrender.com',
+  baseURL: 'https://backend-ong-qarl.onrender.com/api',
   timeout: 15000,
   headers: { 
     "Content-Type": "application/json",
