@@ -5,7 +5,7 @@ import Dashboard from "./components/Dashboard";
 import "./style.css"; 
 
 export default function App() {
-  // 1. States - Rehefa mi-refresh ny browser, miverina amin'ireto sanda ireto foana
+  
   const [page, setPage] = useState("home"); 
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState({ text: "", type: "success" });
