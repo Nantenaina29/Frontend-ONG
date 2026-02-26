@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
@@ -7,18 +7,10 @@ import "./style.css";
 export default function App() {
   
   const [message, setMessage] = useState({ text: "", type: "success" });
-  const allowedPages = ["home", "login", "register", "dashboard"];
-
-  const [page, setPage] = useState(() => {
-      const hash = window.location.hash.replace("#", "");
-      return allowedPages.includes(hash) ? hash : "home";
-    });
+  const [page, setPage] = useState("dashboard");
  
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    window.location.hash = page;
-}, [page]);
 
   const handleMessage = (msg, type = "success") => {
     setMessage({ text: msg, type: type });
