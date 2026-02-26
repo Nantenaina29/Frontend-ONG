@@ -21,18 +21,16 @@ export default function App() {
   };
 
   const handleLoginSuccess = (userData) => {
+    // 1. Omeo sanda ny User voalohany indrindra
     setUser(userData);
     
-    // ← MANOVA IO - Dashboard + Statistique direct
-    window.location.hash = "dashboard#statistiques"; 
+    // 2. Tehirizo ny token
+    // (Efa nataonao ao amin'ny Login.jsx angamba ity, fa tsara raha jerena)
+    
+    // 3. Izay vao miova pejy
     setPage("dashboard");
-    
-    localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("ACCESS_TOKEN", localStorage.getItem("ACCESS_TOKEN")); // backup
-    
-    setMessage({ text: "Connexion réussie !", type: "success" });
+    window.location.hash = "dashboard";
   };
-  
 
 // App.jsx
 

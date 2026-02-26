@@ -33,7 +33,13 @@ export default function Dashboard({ user, setUser, onLogout, onGoToLogin }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
- 
+  useEffect(() => {
+    const token = localStorage.getItem("ACCESS_TOKEN");
+    if (token && user) {
+      setActivePage("statistiques");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
 
   const handleConfirmLogout = () => {
