@@ -22,7 +22,7 @@ import SettingsPage from "./SettingsPage";
 
 export default function Dashboard({ user, setUser, onLogout, onGoToLogin }) {
 
-  const [activePage, setActivePage] = useState(user ? "statistiques" : "home");
+  const [activePage, setActivePage] = useState("statistiques");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
