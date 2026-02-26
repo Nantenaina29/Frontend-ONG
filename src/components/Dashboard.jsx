@@ -29,16 +29,14 @@ export default function Dashboard({ user, setUser, onLogout, onGoToLogin }) {
 
   useEffect(() => {
     if (user) {
-      setActivePage("statistiques");
-    } else {
-      setActivePage("home");
+      setActivePage("dashboard");
     }
   }, [user]);
 
   useEffect(() => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     if (token && user) {
-      setActivePage("statistiques");
+      setActivePage("dashboard");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
