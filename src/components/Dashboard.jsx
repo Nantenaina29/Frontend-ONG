@@ -1,4 +1,4 @@
-import React, { useState } from "react"; // Nesoriko ny useEffect eto satria tsy ilaina intsony
+import React, { useState, useEffect } from "react"; // Nesoriko ny useEffect eto satria tsy ilaina intsony
 import "./Dashboard.css";
 import { 
   FaUsers, FaLayerGroup, FaNetworkWired, FaUserShield, 
@@ -22,9 +22,16 @@ import SettingsPage from "./SettingsPage";
 
 export default function Dashboard({ user, setUser, onLogout, onGoToLogin }) {
 
-  const [activePage, setActivePage] = useState(user ? "statistiques" : "home");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [activePage, setActivePage] = useState("home");
+const [sidebarOpen, setSidebarOpen] = useState(false);
+const [darkMode, setDarkMode] = useState(false);
+
+useEffect(() => {
+  if (user && activePage === "home") {
+    setActivePage("statistiques");
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [user]);
 
 
   const handleConfirmLogout = () => {
