@@ -9,7 +9,7 @@ export default function App() {
   const [message, setMessage] = useState({ text: "", type: "success" });
 
 
-  const [page, setPage] = useState("login");
+  const [page, setPage] = useState("home");
 
   const [user, setUser] = useState(null);
 
