@@ -22,7 +22,7 @@ export default function Register({ onMessage, onSwitch }) {
     }
   
     try {
-      const response = await axiosClient.post('/api/register', { 
+      const response = await axiosClient.post('/register', { 
         name, email, password, pincode 
       });
       
