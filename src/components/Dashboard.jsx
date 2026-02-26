@@ -21,25 +21,19 @@ import TrashPage from "./TrashPage";
 import SettingsPage from "./SettingsPage";
 
 export default function Dashboard({ user, setUser, onLogout, onGoToLogin }) {
+  // 1. Averina ho "home" foana ny sanda voalohany
+  const [activePage, setActivePage] = useState("home");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
-  const [activePage, setActivePage] = useState(user ? "statistiques" : "home");
-const [sidebarOpen, setSidebarOpen] = useState(false);
-const [darkMode, setDarkMode] = useState(false);
+  useEffect(() => {
+    if (user) {
+      setActivePage("statistiques");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
-useEffect(() => {
-  if (user && activePage === "home") {
-    setActivePage("statistiques");
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [user]);
-
-
-useEffect(() => {
-  const token = localStorage.getItem("ACCESS_TOKEN");
-  if (token) {
-    setActivePage("statistiques");
-  }
-}, []);  
+ 
 
 
   const handleConfirmLogout = () => {
