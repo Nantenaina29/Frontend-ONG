@@ -14,23 +14,27 @@ export default function Login({ onSwitch, onLoginSuccess }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLocalMessage({ text: "", type: "" });
-
+  
     if (!email || !password) {
       setLocalMessage({ text: "Veuillez remplir tous les champs.", type: "error" });
       return;
     }
-
+  
     setLoading(true);
     try {
-      await axiosClient.get("https://backend-ong-qarl.onrender.com/sanctum/csrf-cookie");
-      const res = await axiosClient.post("/api/login", { email, password });
-
+      // ESOA NY MANUAL CSRF - NO CSRF NEEDED!
+      // await axiosClient.get("https://backend-ong-qarl.onrender.com/sanctum/csrf-cookie");
+      
+      const res = await axiosClient.post('/login', { email, password });
+  
       if (res.data.token) {
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("ACCESS_TOKEN", res.data.token);  // ← standard name
+        console.log('✅ Login OK:', res.data.user);
       }
-
+  
       onLoginSuccess(res.data.user);
     } catch (err) {
+      console.error('❌ Login error:', err.response?.data);
       setLocalMessage({ 
         text: err.response?.data?.message || "Erreur lors de la connexion !", 
         type: "error" 
@@ -39,6 +43,7 @@ export default function Login({ onSwitch, onLoginSuccess }) {
       setLoading(false);
     }
   };
+  
 
   const handleForgotPassword = () => {
     Swal.fire({
