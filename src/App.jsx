@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
@@ -9,25 +9,6 @@ export default function App() {
   const [page, setPage] = useState("home"); // "home" no voalohany
   const [message, setMessage] = useState({ text: "", type: "success" });
 
-  // 1. Fanaraha-maso ny Session rehefa vao misokatra ny App
-  useEffect(() => {
-    const checkLoggedUser = () => {
-      const storedUser = localStorage.getItem("user");
-      const token = localStorage.getItem("ACCESS_TOKEN");
-
-      if (storedUser && token) {
-        try {
-          setUser(JSON.parse(storedUser));
-          setPage("dashboard");
-        } catch {
-          // Tsy asiana (error) intsony eto
-          localStorage.removeItem("user");
-          setPage("home");
-        }
-      }
-    };
-    checkLoggedUser();
-  }, []);
 
   // 2. Hafatra mipoitra (Flash messages)
   const handleMessage = (msg, type = "success") => {
