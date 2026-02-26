@@ -10,12 +10,12 @@ export default function Login({ onSwitch, onLoginSuccess }) {
   const [loading, setLoading] = useState(false);
   const [localMessage, setLocalMessage] = useState({ text: "", type: "" });
 
-  // 1. LOGIN - MIFANARAKA AMIN'NY APP.JSX LOGIQUE
+  // 1. LOGIN PRINCIPAL - AVEC DEBUG COMPLET
   const handleLogin = async (e) => {
     e.preventDefault();
     setLocalMessage({ text: "", type: "" });
 
-    // Validation
+    // VALIDATION
     if (!email || !password) {
       setLocalMessage({ text: "Veuillez remplir tous les champs.", type: "error" });
       return;
@@ -23,23 +23,52 @@ export default function Login({ onSwitch, onLoginSuccess }) {
 
     setLoading(true);
     try {
-      // API call - Backend Laravel
+      console.log('🔥 Envoi login:', { email });
+
+      // API CALL
       const res = await axiosClient.post('/login', { email, password });
 
-      if (res.data.token) {
-        // Token ho an'ny protected routes
+      // DEBUG COMPLETE
+      console.log('✅ API RESPONSE FULL:', res.data);
+      console.log('✅ TOKEN:', res.data.token);
+      console.log('✅ USER:', res.data.user);
+
+      // CHECK STRUCTURE
+      if (res.data.token && res.data.user) {
         localStorage.setItem("ACCESS_TOKEN", res.data.token);
-        console.log('✅ Login OK:', res.data.user);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
         
-        // 🚀 MIREDIRECT ANY AMIN'NY DASHBOARD (App.jsx manao izany)
-        onLoginSuccess(res.data.user);
+        console.log('🚀 LOGIN SUCCESS → Dashboard!');
+        onLoginSuccess(res.data.user);  // Dashboard!
+        
+      } else if (res.data.message) {
+        setLocalMessage({ 
+          text: res.data.message || "Email ou mot de passe incorrect!", 
+          type: "error" 
+        });
+        
+      } else {
+        console.error('❌ RESPONSE STRUCTURE:', res.data);
+        setLocalMessage({ 
+          text: "Réponse serveur tsy marina.", 
+          type: "error" 
+        });
       }
+
     } catch (err) {
-      console.error('❌ Login error:', err.response?.data);
-      setLocalMessage({ 
-        text: err.response?.data?.message || "Email na mot de passe diso!", 
-        type: "error" 
-      });
+      console.error('❌ LOGIN ERROR:', err.response?.data || err.message);
+      
+      // ERROR HANDLING
+      if (err.response?.status === 401) {
+        setLocalMessage({ text: "Email ou mot de passe incorrect!", type: "error" });
+      } else if (err.response?.status === 422) {
+        setLocalMessage({ text: err.response.data.message || "Données invalides", type: "error" });
+      } else {
+        setLocalMessage({ 
+          text: err.response?.data?.message || "Erreur serveur. Tasy aza.", 
+          type: "error" 
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -64,8 +93,8 @@ export default function Login({ onSwitch, onLoginSuccess }) {
           return;
         }
         try {
-          const response = await axiosClient.post('/api/forgot-password', { email: emailValue });
-          return response.data;
+          await axiosClient.post('/api/forgot-password', { email: emailValue });
+          return true;
         } catch (error) {
           Swal.showValidationMessage(
             `Erreur: ${error.response?.data?.message || "Impossible d'envoyer l'email"}`
@@ -95,7 +124,7 @@ export default function Login({ onSwitch, onLoginSuccess }) {
         <p>Accédez à votre espace de gestion administrative</p>
       </div>
 
-      {/* MESSAGE LOCAL */}
+      {/* MESSAGE */}
       {localMessage.text && (
         <div className={`msg-box ${localMessage.type === "error" ? "msg-error" : "msg-success"}`}>
           {localMessage.text}
@@ -141,7 +170,6 @@ export default function Login({ onSwitch, onLoginSuccess }) {
             />
           </div>
           
-          {/* LIEN OUBLIÉ */}
           <div className="forgot-password-container" style={{ textAlign: 'right', marginTop: '5px' }}>
             <span 
               className="link-forgot" 
@@ -155,9 +183,7 @@ export default function Login({ onSwitch, onLoginSuccess }) {
 
         {/* BUTTON */}
         <button type="submit" disabled={loading} className="btn-submit big-btn">
-          {loading ? (
-            "En attente..."
-          ) : (
+          {loading ? "En attente..." : (
             <>
               <FaSignInAlt /> <span>Se connecter</span>
             </>
@@ -165,7 +191,7 @@ export default function Login({ onSwitch, onLoginSuccess }) {
         </button>
       </form>
 
-      {/* FOOTER - LINK REGISTER */}
+      {/* REGISTER LINK */}
       <div className="form-footer">
         <p>
           Vous n'avez pas encore de compte ?{" "}
