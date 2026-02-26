@@ -5,102 +5,82 @@ import Dashboard from "./components/Dashboard";
 import "./style.css";
 
 export default function App() {
-
+  const [user, setUser] = useState(null);
+  const [page, setPage] = useState("home"); // "home" no voalohany
   const [message, setMessage] = useState({ text: "", type: "success" });
 
-
-  const [page, setPage] = useState("home");
-
-  const [user, setUser] = useState(null);
-
- 
+  // 1. Fanaraha-maso ny Session rehefa vao misokatra ny App
   useEffect(() => {
     const checkLoggedUser = () => {
       const storedUser = localStorage.getItem("user");
       const token = localStorage.getItem("ACCESS_TOKEN");
-  
+
       if (storedUser && token) {
         try {
           setUser(JSON.parse(storedUser));
           setPage("dashboard");
-        } catch (error) {
-          console.error("Erreur JSON parse:", error);
+        } catch {
+          // Tsy asiana (error) intsony eto
           localStorage.removeItem("user");
-          setPage("login");
+          setPage("home");
         }
-      } else {
-        setPage("login");
       }
     };
-  
     checkLoggedUser();
-    // Ity ambany ity no manala ny menamena rehetra
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // 2. Hafatra mipoitra (Flash messages)
   const handleMessage = (msg, type = "success") => {
     setMessage({ text: msg, type });
     setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
   };
 
+  // 3. Rehefa tafiditra (Login Success)
   const handleLoginSuccess = (userData) => {
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
-    setPage("dashboard");
-    setMessage({ text: "Connexion réussie !", type: "success" });
+    setPage("dashboard"); // Tonga dia any amin'ny Dashboard
+    handleMessage("Connexion réussie !");
   };
 
+  // 4. Rehefa mivoaka (Logout)
   const handleLogout = () => {
     localStorage.removeItem("ACCESS_TOKEN");
     localStorage.removeItem("user");
     setUser(null);
-    setPage("login");
+    setPage("home"); // Miverina any amin'ny pejy fandraisana
   };
 
-  const handleGoToLogin = () => {
-    setPage("login");
-  };
-
-  // ✅ Dashboard
+  // ✅ 1. RAHA DASHBOARD (Rehefa tafiditra)
   if (page === "dashboard") {
     return (
       <Dashboard
         user={user}
         setUser={setUser}
         onLogout={handleLogout}
-        onGoToLogin={handleGoToLogin}
+        onGoToLogin={() => setPage("login")}
       />
     );
   }
 
-  // ✅ Auth pages
+  // ✅ 2. RAHA AUTH (Login na Register)
   return (
     <div className="login-page">
       <div className="brand-panel">
         <div className="brand-content">
           <img src="/Logo TAF 3D.png" alt="Logo TAF3D" className="brand-logo" />
-          <h1 className="brand-title">
-            ONG <span>Tsinjo Aina Fianarantsoa</span>
-          </h1>
+          <h1 className="brand-title">ONG <span>Tsinjo Aina Fianarantsoa</span></h1>
           <p className="brand-description">
-          "Promouvoir un développement durable et inclusif au cœur de la 
-            Haute Matsiatra. Nous œuvrons pour l'épanouissement humain à travers 
-            la formation, l'accompagnement et l'innovation sociale."
+            "Promouvoir un développement durable et inclusif au cœur de la Haute Matsiatra..."
           </p>
-          <div className="brand-footer-info">
-            Région Haute Matsiatra • Madagascar
-          </div>
+          <div className="brand-footer-info">Région Haute Matsiatra • Madagascar</div>
         </div>
       </div>
 
       <div className="form-panel">
         <div className="auth-dynamic-content">
           {message.text && (
-            <div
-              className={`msg-box ${
-                message.type === "error" ? "msg-error" : "msg-success"
-              }`}
-            >
+            <div className={`msg-box ${message.type === "error" ? "msg-error" : "msg-success"}`}>
               {message.text}
             </div>
           )}
@@ -109,6 +89,7 @@ export default function App() {
             <Login
               onSwitch={() => setPage("register")}
               onLoginSuccess={handleLoginSuccess}
+              onBackToHome={() => setPage("dashboard")} // Raha te hiverina Dashboard
             />
           ) : (
             <Register
