@@ -23,11 +23,7 @@ import SettingsPage from "./SettingsPage";
 export default function Dashboard({ user, setUser, onLogout, onGoToLogin }) {
   
 
-  const [activePage, setActivePage] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return (user || savedUser) ? "statistiques" : "home";
-  });
-
+  const [activePage, setActivePage] = useState("home");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 

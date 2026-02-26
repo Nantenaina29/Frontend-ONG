@@ -7,7 +7,7 @@ import "./style.css";
 export default function App() {
   
   const [message, setMessage] = useState({ text: "", type: "success" });
-  const [page, setPage] = useState(window.location.hash.replace('#', '') || "dashboard");
+  const [page, setPage] = useState(window.location.hash.replace('#', '') || "home");
  
   const [user, setUser] = useState(null);
 
@@ -22,23 +22,23 @@ export default function App() {
 
 
 // App.jsx
-const handleLoginSuccess = (userData) => {
-  // 1. Tehirizo ho hita manerana ny browser ny user
-  localStorage.setItem("user", JSON.stringify(userData));
-  
-  // 2. Update state
-  setUser(userData);
-  
-  // 3. Ovaina ny pejy (Dashboard ihany, aza asiana hash hafa)
-  setPage("dashboard");
-  setMessage({ text: "Connexion réussie !", type: "success" });
-};
+    const handleLoginSuccess = (userData) => {
+      // 1. Tehirizo ho hita manerana ny browser ny user
+      localStorage.setItem("user", JSON.stringify(userData));
+      
+      // 2. Update state
+      setUser(userData);
+      
+      // 3. Ovaina ny pejy (Dashboard ihany, aza asiana hash hafa)
+      setPage("dashboard");
+      setMessage({ text: "Connexion réussie !", type: "success" });
+    };
 
           const handleLogout = () => {
             localStorage.removeItem("ACCESS_TOKEN");
             localStorage.removeItem("user"); // Fadio koa ny user ao amin'ny storage
             setUser(null);
-            setPage("login"); // Na inona na inona anaran'ny pejy fidirana ao aminao
+            setPage("home"); // Na inona na inona anaran'ny pejy fidirana ao aminao
           };
 
           // AMPY ITY FONCTION ITY:
