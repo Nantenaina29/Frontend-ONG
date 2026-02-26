@@ -32,7 +32,7 @@ export default function Login({ onSwitch, onLoginSuccess }) {
         console.log('✅ Login OK:', res.data.user);
       }
   
-      onLoginSuccess(res.data.user);
+      onLoginSuccess(res.data.user, "statistiques");
     } catch (err) {
       console.error('❌ Login error:', err.response?.data);
       setLocalMessage({ 

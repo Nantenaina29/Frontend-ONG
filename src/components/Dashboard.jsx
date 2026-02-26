@@ -33,6 +33,12 @@ useEffect(() => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [user]);
 
+useEffect(() => {
+  const token = localStorage.getItem("ACCESS_TOKEN");
+  if (token) {
+    setActivePage("statistiques");
+  }
+}, []);  
 
   const handleConfirmLogout = () => {
     Swal.fire({
