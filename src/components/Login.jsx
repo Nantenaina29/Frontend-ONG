@@ -10,49 +10,39 @@ export default function Login({ onSwitch, onLoginSuccess }) {
   const [loading, setLoading] = useState(false);
   const [localMessage, setLocalMessage] = useState({ text: "", type: "" });
 
-
+  // 1. Lojika ho an'ny fidirana (Login)
   const handleLogin = async (e) => {
     e.preventDefault();
-
     setLocalMessage({ text: "", type: "" });
-
+  
     if (!email || !password) {
       setLocalMessage({ text: "Veuillez remplir tous les champs.", type: "error" });
       return;
     }
   
     setLoading(true);
-
     try {
-
+   
+      
       const res = await axiosClient.post('/login', { email, password });
-
-      if (res.data.status === 'success' && res.data.token) {
-
-        localStorage.setItem("ACCESS_TOKEN", res.data.token);
-
-        console.log('✅ Tafiditra ny mpampiasa:', res.data.user.name);
-
-        onLoginSuccess(res.data.user); 
-        
-      } else {
-        setLocalMessage({ text: "Erreur d'authentification inconnue.", type: "error" });
+  
+      if (res.data.token) {
+        localStorage.setItem("ACCESS_TOKEN", res.data.token);  // ← standard name
+        console.log('✅ Login OK:', res.data.user);
       }
-
+  
+      onLoginSuccess(res.data.user);
     } catch (err) {
-      console.error('❌ Erreur de connexion:', err.response?.data);
-      
-      const errorMessage = err.response?.data?.message || "Email ou mot de passe incorrect!";
-      
+      console.error('❌ Login error:', err.response?.data);
       setLocalMessage({ 
-        text: errorMessage, 
+        text: err.response?.data?.message || "Erreur lors de la connexion !", 
         type: "error" 
       });
-      
     } finally {
       setLoading(false);
     }
   };
+  
 
   const handleForgotPassword = () => {
     Swal.fire({
@@ -68,6 +58,7 @@ export default function Login({ onSwitch, onLoginSuccess }) {
       showLoaderOnConfirm: true,
       preConfirm: async (emailValue) => {
         try {
+          // Appel API vers votre Backend PHP/Laravel
           const response = await axiosClient.post('/api/forgot-password', { email: emailValue });
           return response.data;
         } catch (error) {
