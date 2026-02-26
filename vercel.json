@@ -1,9 +1,9 @@
 {
     "rewrites": [
-      {
-        "source": "/api/(.*)",
-        "destination": "https://backend-ong-qarl.onrender.com/api/$1"
-      }
+        {
+            "source": "/api/:path*",
+            "destination": "https://backend-ong-qarl.onrender.com/api/:path*"
+          }
     ],
     "headers": [
       {

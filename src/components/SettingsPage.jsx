@@ -40,7 +40,7 @@ export default function SettingsPage({ user , setUser}) {
   
     try {
       // 2. Miantso ny API
-      const response = await axiosClient.post("/api/update-profile", profile);
+      const response = await axiosClient.post("/update-profile", profile);
   
       if (response.data && (response.data.status === 'success' || response.status === 200)) {
         

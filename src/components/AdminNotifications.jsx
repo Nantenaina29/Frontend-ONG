@@ -10,7 +10,7 @@ export default function AdminNotifications() {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await axiosClient.get("/api/notifications");
+        const response = await axiosClient.get("/notifications");
         const dataToSet = response.data.data || response.data;
         
         if (Array.isArray(dataToSet)) {

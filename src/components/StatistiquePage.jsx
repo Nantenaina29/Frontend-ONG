@@ -37,11 +37,11 @@ export default function StatistiquePage() {
     const fetchAll = async () => {
       try {
         const [resM, resG, resR, resP, resF] = await Promise.all([
-          axiosClient.get("/api/membres"),
-          axiosClient.get("/api/gs"),
-          axiosClient.get("/api/reseaux"),
-          axiosClient.get("/api/responsables"),
-          axiosClient.get("/api/formations")
+          axiosClient.get("/membres"),
+          axiosClient.get("/gs"),
+          axiosClient.get("/reseaux"),
+          axiosClient.get("/responsables"),
+          axiosClient.get("/formations")
         ]);
         setData({
           membres: resM.data?.data || resM.data || [],

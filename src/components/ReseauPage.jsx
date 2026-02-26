@@ -180,10 +180,10 @@ const tauxAutonomie = totalReseaux > 0 ? ((totalAutonome / totalReseaux) * 100).
 
     try {
       if (isEdit) {
-        await axiosClient.put(`/api/reseaux/${currentId}`, dataToSend);
+        await axiosClient.put(`/reseaux/${currentId}`, dataToSend);
         Swal.fire("Bien!", "Réseau modifié avec succès", "success");
       } else {
-       await axiosClient.post("/api/reseaux", dataToSend);
+       await axiosClient.post("/reseaux", dataToSend);
         Swal.fire("Bien!", "Réseau ajouté avec succès", "success");
       }
       await fetchReseaux();
@@ -225,7 +225,7 @@ const tauxAutonomie = totalReseaux > 0 ? ((totalAutonome / totalReseaux) * 100).
     });
     if (result.isConfirmed) {
       try {
-        await axiosClient.delete(`/api/reseaux/${id}`);
+        await axiosClient.delete(`/reseaux/${id}`);
         setReseaux(reseaux.filter(r => r.CodeRS !== id));
         Swal.fire("Supprimé!", "Le réseau a été supprimé.", "success");
       } catch (err) {

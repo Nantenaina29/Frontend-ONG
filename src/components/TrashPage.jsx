@@ -23,7 +23,7 @@ const TrashPage = () => {
         setLoading(true);
         setItems([]); 
         try {
-            const { data } = await axiosClient.get(`/api/trash/${selectedTable}`);
+            const { data } = await axiosClient.get(`/trash/${selectedTable}`);
             
             const uniqueData = data.filter((item, index, self) =>
                 index === self.findIndex((t) => (

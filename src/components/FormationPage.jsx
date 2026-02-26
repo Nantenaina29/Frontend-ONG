@@ -226,7 +226,7 @@ useEffect(() => {
     };
   
     try {
-      await axiosClient.post("/api/formations", finalData);
+      await axiosClient.post("/formations", finalData);
       Swal.fire("Bien!", "Formation ajout avec succès!", "success");
       fetchData();
       setShowModal(false);

@@ -36,7 +36,7 @@ export default function GSPage() {
   useEffect(() => {
     const fetchGsDataInitial = async () => {
       try {
-        const res = await axiosClient.get("/api/gs");
+        const res = await axiosClient.get("/gs");
         setGsData(res.data);
       } catch (error) {
         console.error("Erreur fetch GS :", error);
@@ -45,7 +45,7 @@ export default function GSPage() {
 
     const fetchMenages = async () => {
       try {
-        const res = await axiosClient.get("/api/menages");
+        const res = await axiosClient.get("/menages");
         setMenages(res.data);
       } catch (error) {
         console.error("Erreur fetch menages :", error);
