@@ -7,7 +7,7 @@ import "./style.css";
 export default function App() {
   
   const [message, setMessage] = useState({ text: "", type: "success" });
-  const [page, setPage] = useState(window.location.hash.replace('#', '') || "dashboard");
+  const [page, setPage] = useState(window.location.hash.replace('#', '') || "home");
  
   const [user, setUser] = useState(null);
 
