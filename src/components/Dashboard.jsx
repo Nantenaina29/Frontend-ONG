@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; // Nesoriko ny useEffect eto satria tsy ilaina intsony
+import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
 import { 
   FaUsers, FaLayerGroup, FaNetworkWired, FaUserShield, 
@@ -6,7 +6,6 @@ import {
   FaSun, FaMoon, FaCog, FaUserCircle 
 } from "react-icons/fa";
 
-import MainPage from "./MainPage";
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
@@ -20,31 +19,17 @@ import AdminNotifications from "./AdminNotifications";
 import TrashPage from "./TrashPage";
 import SettingsPage from "./SettingsPage";
 
-export default function Dashboard({ user, setUser, onLogout, onGoToLogin }) {
-  
-
-  const [activePage, setActivePage] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return (user || savedUser) ? "statistiques" : "home";
-  });
-
+export default function Dashboard({ user, setUser, onLogout }) {
+  // 🎯 START AVY AMIN'NY STATISTIQUES IHANY - NO HOME!
+  const [activePage, setActivePage] = useState("statistiques");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      setActivePage("statistiques");
-    }
-  }, [user]);
+
 
   useEffect(() => {
-    const token = localStorage.getItem("ACCESS_TOKEN");
-    if (token && user) {
-      setActivePage("statistiques");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+    localStorage.setItem('darkMode', darkMode);
+  }, [darkMode]);
 
   const handleConfirmLogout = () => {
     Swal.fire({
@@ -54,13 +39,12 @@ export default function Dashboard({ user, setUser, onLogout, onGoToLogin }) {
       showCancelButton: true,
       confirmButtonColor: '#10b981',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Oui',
-      cancelButtonText: 'Non',
+      confirmButtonText: 'Oui, déconnexion',
+      cancelButtonText: 'Rester connecté',
       reverseButtons: true 
     }).then((result) => {
       if (result.isConfirmed) {
-        setActivePage("home");    
-        onLogout();
+        onLogout();  // App.jsx manao redirect any amin'ny MainPage
       }
     });
   };
@@ -73,112 +57,117 @@ export default function Dashboard({ user, setUser, onLogout, onGoToLogin }) {
     setSidebarOpen(false);
   };
 
-  const isLandingPage = activePage === "home";
-
   return (
     <div className={`dashboard-container ${darkMode ? "dark-theme" : ""}`}>
-      
-      {!isLandingPage && (
-        <nav className="top-navbar">
-          <div className="nav-left">
-            <button className="sidebar-toggle" onClick={toggleSidebar}>
-              {sidebarOpen ? "✕" : "☰"}
-            </button>
-            <div className="brand-group">
-              <img src="/Logo.jpg" alt="Logo" className="nav-logo" />
-              <h1 className="nav-title">ONG <span>TSINJO AINA FIANARANTSOA</span></h1>
-            </div>
+      {/* TOP NAVBAR */}
+      <nav className="top-navbar">
+        <div className="nav-left">
+          <button className="sidebar-toggle" onClick={toggleSidebar}>
+            {sidebarOpen ? "✕" : "☰"}
+          </button>
+          <div className="brand-group">
+            <img src="/Logo.jpg" alt="Logo" className="nav-logo" />
+            <h1 className="nav-title">ONG <span>TSINJO AINA FIANARANTSOA</span></h1>
           </div>
-          
-          <div className="nav-right">
-            <div className="user-profile-section">
+        </div>
+        
+        <div className="nav-right">
+          {/* USER PROFILE */}
+          <div className="user-profile-section">
             <div className="avatar-wrapper">
               {user?.photo ? (
-                <img 
-                  key={user.photo}
-                  src={`${user.photo}${user.photo.includes('?') ? '&' : '?'}t=${new Date().getTime()}`} 
-                  alt="Profil" 
-                  className="user-avatar" 
-                />
-              ) : (
+                <img  
+                src={`${user.photo}${user.photo.includes('?') ? '&' : '?'}t=${+new Date()}`} 
+                alt="Profil" 
+                className="user-avatar" 
+              />
+
+                            ) : (
                 <FaUserCircle className="user-avatar-placeholder" />
               )}
             </div>
-              <div className="user-info">
-                <span className="user-name">{user?.name }</span>
-              </div>
+            <div className="user-info">
+              <span className="user-name">{user?.name || 'Utilisateur'}</span>
             </div>
+          </div>
 
-            <button 
+          {/* SETTINGS */}
+          <button 
             className="nav-icon-btn" 
             title="Paramètres"
-            onClick={() => setActivePage("settings")} 
+            onClick={() => setActivePage("settings")}
           >
             <FaCog className={`settings-icon ${activePage === "settings" ? "active-icon" : ""}`} />
           </button>
 
-            <button className="nav-icon-btn" onClick={toggleDarkMode} title="Changer le mode">
-              {darkMode ? <FaSun className="theme-icon sun" /> : <FaMoon className="theme-icon moon" />}
-            </button>
+          {/* DARK MODE */}
+          <button className="nav-icon-btn" onClick={toggleDarkMode} title="Changer le mode">
+            {darkMode ? <FaSun className="theme-icon sun" /> : <FaMoon className="theme-icon moon" />}
+          </button>
 
-            <button 
-              className="nav-icon-btn logout-nav-btn" 
-              onClick={(e) => {
-                e.stopPropagation(); 
-                handleConfirmLogout();
-              }}
-              title="Déconnexion"
-            >
-              <FaSignOutAlt />
-            </button>
-            </div>
-        </nav>
-      )}
+          {/* LOGOUT */}
+          <button 
+            className="nav-icon-btn logout-nav-btn" 
+            onClick={handleConfirmLogout}
+            title="Déconnexion"
+          >
+            <FaSignOutAlt />
+          </button>
+        </div>
+      </nav>
 
       <div className="main-wrapper">
-        {!isLandingPage && user && (
-          <aside className={`main-sidebar ${sidebarOpen ? "open" : "closed"}`}>
-            <ul className="nav-menu">
-            <li className={activePage === "statistiques" ? "active" : ""} onClick={() => handleSidebarItemClick("statistiques")}>
-                <FaChartBar className="icon" /> <span>Tableau de bord</span>
-              </li>
-              <li className={activePage === "membres" ? "active" : ""} onClick={() => handleSidebarItemClick("membres")}>
-                <FaUsers className="icon" /> <span>Membres</span>
-              </li>
-              <li className={activePage === "gs" ? "active" : ""} onClick={() => handleSidebarItemClick("gs")}>
-                <FaLayerGroup className="icon" /> <span>Groupes Solidarités</span>
-              </li>
-              <li className={activePage === "reseau" ? "active" : ""} onClick={() => handleSidebarItemClick("reseau")}>
-                <FaNetworkWired className="icon" /> <span>Réseaux</span>
-              </li>
-              <li className={activePage === "responsable" ? "active" : ""} onClick={() => handleSidebarItemClick("responsable")}>
-                <FaUserShield className="icon" /> <span>Responsables</span>
-              </li>
-              <li className={activePage === "formation" ? "active" : ""} onClick={() => handleSidebarItemClick("formation")}>
-                <FaChalkboardTeacher className="icon" /> <span>Formations</span>
-              </li>
+        {/* SIDEBAR */}
+        <aside className={`main-sidebar ${sidebarOpen ? "open" : "closed"}`}>
+          <ul className="nav-menu">
+            <li className={activePage === "statistiques" ? "active" : ""} 
+                onClick={() => handleSidebarItemClick("statistiques")}>
+              <FaChartBar className="icon" /> <span>Tableau de bord</span>
+            </li>
+            <li className={activePage === "membres" ? "active" : ""} 
+                onClick={() => handleSidebarItemClick("membres")}>
+              <FaUsers className="icon" /> <span>Membres</span>
+            </li>
+            <li className={activePage === "gs" ? "active" : ""} 
+                onClick={() => handleSidebarItemClick("gs")}>
+              <FaLayerGroup className="icon" /> <span>Groupes Solidarités</span>
+            </li>
+            <li className={activePage === "reseau" ? "active" : ""} 
+                onClick={() => handleSidebarItemClick("reseau")}>
+              <FaNetworkWired className="icon" /> <span>Réseaux</span>
+            </li>
+            <li className={activePage === "responsable" ? "active" : ""} 
+                onClick={() => handleSidebarItemClick("responsable")}>
+              <FaUserShield className="icon" /> <span>Responsables</span>
+            </li>
+            <li className={activePage === "formation" ? "active" : ""} 
+                onClick={() => handleSidebarItemClick("formation")}>
+              <FaChalkboardTeacher className="icon" /> <span>Formations</span>
+            </li>
 
+            {/* ADMIN ONLY */}
+            {user?.role === "admin" && (
+              <>
+                <li className={activePage === "notifications" ? "active" : ""} 
+                    onClick={() => handleSidebarItemClick("notifications")}>
+                  <FaBell className="icon" /> <span>Notifications</span>
+                </li>
+                <li className={activePage === "trash" ? "active" : ""} 
+                    onClick={() => handleSidebarItemClick("trash")}>
+                  <FaTrash className="icon" /> <span>Corbeille</span>
+                </li>
+              </>
+            )}
+          </ul>
+        </aside>
 
-              {user?.role === "admin" && (
-                <>
-                  <li className={activePage === "notifications" ? "active" : ""} onClick={() => handleSidebarItemClick("notifications")}>
-                    <FaBell className="icon" /> <span>Notifications</span>
-                  </li>
-                  <li className={activePage === "trash" ? "active" : ""} onClick={() => handleSidebarItemClick("trash")}>
-                    <FaTrash className="icon" /> <span>Corbeille</span>
-                  </li>
-                </>
-              )}
-            </ul>
-          </aside>
-        )}
-
-        <main className={isLandingPage ? "main-content-landing" : "main-content"}>
+        {/* MAIN CONTENT */}
+        <main className="main-content">
           <div className="page-renderer">
             {(() => {
               switch (activePage) {
-                case "home":
-                  return <MainPage user={user} onGoToLogin={onGoToLogin} />;
+                case "statistiques":
+                  return <StatistiquePage />;
                 case "membres":
                   return <MembresPage />;
                 case "gs":
@@ -189,25 +178,23 @@ export default function Dashboard({ user, setUser, onLogout, onGoToLogin }) {
                   return <ResponsablePage />;
                 case "formation":
                   return <FormationPage />;
-                case "statistiques":
-                  return <StatistiquePage />;
-                  case "settings": 
+                case "settings":
                   return <SettingsPage user={user} setUser={setUser} />;
                 case "trash":
                   return <TrashPage />;
                 case "notifications":
-                  return user?.role === "admin" ? <AdminNotifications /> : <div className="access-denied">Accès Refusé</div>;
+                  return user?.role === "admin" ? 
+                    <AdminNotifications /> : 
+                    <div className="access-denied">Accès Refusé</div>;
                 default:
-                  return user ? <StatistiquePage /> : <MainPage user={user} onGoToLogin={onGoToLogin} />;
+                  return <StatistiquePage />;
               }
             })()}
           </div>
 
-          {!isLandingPage && (
-            <footer className="main-footer">
-              © {new Date().getFullYear()} ONG TSINJO AINA FIANARANTSOA - Système de Gestion Intégrée
-            </footer>
-          )}
+          <footer className="main-footer">
+            © {new Date().getFullYear()} ONG TSINJO AINA FIANARANTSOA - Système de Gestion Intégrée
+          </footer>
         </main>
       </div>
     </div>

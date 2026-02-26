@@ -2,7 +2,7 @@ import { useState } from "react";
 import axiosClient from "../axiosClient";
 import "../style.css";
 import { FaEnvelope, FaLock, FaSignInAlt } from "react-icons/fa";
-import Swal from 'sweetalert2'; // Aza hadino ny nanafatra ity
+import Swal from 'sweetalert2';
 
 export default function Login({ onSwitch, onLoginSuccess }) {
   const [email, setEmail] = useState("");
@@ -10,40 +10,42 @@ export default function Login({ onSwitch, onLoginSuccess }) {
   const [loading, setLoading] = useState(false);
   const [localMessage, setLocalMessage] = useState({ text: "", type: "" });
 
-  // 1. Lojika ho an'ny fidirana (Login)
+  // 1. LOGIN - MIFANARAKA AMIN'NY APP.JSX LOGIQUE
   const handleLogin = async (e) => {
     e.preventDefault();
     setLocalMessage({ text: "", type: "" });
-  
+
+    // Validation
     if (!email || !password) {
       setLocalMessage({ text: "Veuillez remplir tous les champs.", type: "error" });
       return;
     }
-  
+
     setLoading(true);
     try {
-   
-      
+      // API call - Backend Laravel
       const res = await axiosClient.post('/login', { email, password });
-  
+
       if (res.data.token) {
-        localStorage.setItem("ACCESS_TOKEN", res.data.token);  // ← standard name
+        // Token ho an'ny protected routes
+        localStorage.setItem("ACCESS_TOKEN", res.data.token);
         console.log('✅ Login OK:', res.data.user);
+        
+        // 🚀 MIREDIRECT ANY AMIN'NY DASHBOARD (App.jsx manao izany)
+        onLoginSuccess(res.data.user);
       }
-  
-      onLoginSuccess(res.data.user);
     } catch (err) {
       console.error('❌ Login error:', err.response?.data);
       setLocalMessage({ 
-        text: err.response?.data?.message || "Erreur lors de la connexion !", 
+        text: err.response?.data?.message || "Email na mot de passe diso!", 
         type: "error" 
       });
     } finally {
       setLoading(false);
     }
   };
-  
 
+  // 2. MOT DE PASSE OUBLIÉ
   const handleForgotPassword = () => {
     Swal.fire({
       title: 'Réinitialisation',
@@ -52,13 +54,16 @@ export default function Login({ onSwitch, onLoginSuccess }) {
       inputPlaceholder: 'Votre email',
       showCancelButton: true,
       cancelButtonText: 'Annuler',
-      confirmButtonText: 'Envoyer',  
+      confirmButtonText: 'Envoyer',
       cancelButtonColor: '#d33',
       confirmButtonColor: '#10b981',
       showLoaderOnConfirm: true,
       preConfirm: async (emailValue) => {
+        if (!emailValue) {
+          Swal.showValidationMessage('Veuillez entrer un email valide');
+          return;
+        }
         try {
-          // Appel API vers votre Backend PHP/Laravel
           const response = await axiosClient.post('/api/forgot-password', { email: emailValue });
           return response.data;
         } catch (error) {
@@ -81,22 +86,25 @@ export default function Login({ onSwitch, onLoginSuccess }) {
 
   return (
     <div className="form-wrapper login-v-spacer">
+      {/* HEADER */}
       <div className="form-header">
         <div className="header-icon-container">
-           <FaSignInAlt className="header-icon big-icon" />
+          <FaSignInAlt className="header-icon big-icon" />
         </div>
         <h2>Connexion</h2>
         <p>Accédez à votre espace de gestion administrative</p>
       </div>
 
+      {/* MESSAGE LOCAL */}
       {localMessage.text && (
         <div className={`msg-box ${localMessage.type === "error" ? "msg-error" : "msg-success"}`}>
           {localMessage.text}
         </div>
       )}
 
+      {/* FORM */}
       <form onSubmit={handleLogin} className="login-form-content">
-        {/* INPUT EMAIL */}
+        {/* EMAIL */}
         <div className="input-group">
           <label className="input-label">Identifiant (Email)</label>
           <div className="input-relative">
@@ -110,11 +118,12 @@ export default function Login({ onSwitch, onLoginSuccess }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
         </div>
 
-        {/* INPUT PASSWORD */}
+        {/* PASSWORD + OUBLIÉ */}
         <div className="input-group">
           <label className="input-label">Mot de passe</label>
           <div className="input-relative">
@@ -128,10 +137,11 @@ export default function Login({ onSwitch, onLoginSuccess }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
           
-          {/* LIEN MOT DE PASSE OUBLIE */}
+          {/* LIEN OUBLIÉ */}
           <div className="forgot-password-container" style={{ textAlign: 'right', marginTop: '5px' }}>
             <span 
               className="link-forgot" 
@@ -143,15 +153,19 @@ export default function Login({ onSwitch, onLoginSuccess }) {
           </div>
         </div>
 
+        {/* BUTTON */}
         <button type="submit" disabled={loading} className="btn-submit big-btn">
-          {loading ? "En attente..." : (
+          {loading ? (
+            "En attente..."
+          ) : (
             <>
-              <FaSignInAlt /> <span>Se connecter </span>
+              <FaSignInAlt /> <span>Se connecter</span>
             </>
           )}
         </button>
       </form>
 
+      {/* FOOTER - LINK REGISTER */}
       <div className="form-footer">
         <p>
           Vous n'avez pas encore de compte ?{" "}

@@ -1,64 +1,60 @@
+// App.jsx - PERFECT VERSION
 import { useState, useEffect } from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
-import "./style.css"; 
+import MainPage from "./components/MainPage";
+import "./style.css";
 
 export default function App() {
-  
-  const [message, setMessage] = useState({ text: "", type: "success" });
-  const [page, setPage] = useState(window.location.hash.replace('#', '') || "home");
- 
+  const [page, setPage] = useState("home");  // MainPage par défaut
   const [user, setUser] = useState(null);
+  const [message, setMessage] = useState({ text: "", type: "success" });
 
+  // Hash sync
   useEffect(() => {
     window.location.hash = page;
-}, [page]);
+  }, [page]);
 
-  const handleMessage = (msg, type = "success") => {
-    setMessage({ text: msg, type: type });
-    setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
+  // FUNCTIONS
+  const goToLogin = () => {
+    setPage("login");
+    window.location.hash = "login";
   };
 
+  const goToRegister = () => {
+    setPage("register");
+    window.location.hash = "register";
+  };
 
-// App.jsx
-    const handleLoginSuccess = (userData) => {
-      // 1. Tehirizo ho hita manerana ny browser ny user
-      localStorage.setItem("user", JSON.stringify(userData));
-      
-      // 2. Update state
-      setUser(userData);
-      
-      // 3. Ovaina ny pejy (Dashboard ihany, aza asiana hash hafa)
-      setPage("dashboard");
-      setMessage({ text: "Connexion réussie !", type: "success" });
-    };
+  const handleLoginSuccess = (userData) => {
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+    setPage("dashboard");
+    window.location.hash = "dashboard";
+    setMessage({ text: "Connexion réussie !", type: "success" });
+  };
 
-          const handleLogout = () => {
-            localStorage.removeItem("ACCESS_TOKEN");
-            localStorage.removeItem("user"); // Fadio koa ny user ao amin'ny storage
-            setUser(null);
-            setPage("login"); // Na inona na inona anaran'ny pejy fidirana ao aminao
-          };
+  const handleLogout = () => {
+    localStorage.removeItem("ACCESS_TOKEN");
+    localStorage.removeItem("user");
+    setUser(null);
+    setPage("home");
+    window.location.hash = "home";
+  };
 
-          // AMPY ITY FONCTION ITY:
-          const handleGoToLogin = () => {
-            setPage("login"); 
-          };
-
-  // 2. Raha eo amin'ny Dashboard (na Landing Page na Statistiques)
-  if (page === "dashboard") {
+  // 1. DASHBOARD (user logged)
+  if (page === "dashboard" && user) {
     return (
       <Dashboard 
         user={user} 
         setUser={setUser} 
         onLogout={handleLogout} 
-        onGoToLogin={handleGoToLogin} 
       />
     );
   }
 
-  // 3. Raha eo amin'ny Login na Register
+  // 2. LOGIN/REGISTER/HOME (public pages)
   return (
     <div className="login-page">
       {/* PANEL ANKAVIA - Brand Content */}
@@ -67,9 +63,7 @@ export default function App() {
           <img src="/Logo TAF 3D.png" alt="Logo TAF3D" className="brand-logo" />
           <h1 className="brand-title">ONG <span>Tsinjo Aina Fianarantsoa</span></h1>
           <p className="brand-description">
-            "Promouvoir un développement durable et inclusif au cœur de la 
-            Haute Matsiatra. Nous œuvrons pour l'épanouissement humain à travers 
-            la formation, l'accompagnement et l'innovation sociale."
+            "Promouvoir un développement durable et inclusif au cœur de la Haute Matsiatra..."
           </p>
           <div className="brand-footer-info">Région Haute Matsiatra • Madagascar</div>
         </div>
@@ -84,16 +78,18 @@ export default function App() {
             </div>
           )}
 
-          {page === "login" ? (
-            <Login 
-              onSwitch={() => setPage("register")} 
-              onLoginSuccess={handleLoginSuccess} 
-              onBackToHome={() => setPage("dashboard")} 
+          {/* PERFECT SWITCHING */}
+          {page === "home" && <MainPage onGoToLogin={goToLogin} />}
+          {page === "login" && (
+            <Login
+              onSwitch={goToRegister}
+              onLoginSuccess={handleLoginSuccess}
             />
-          ) : (
-            <Register 
-              onSwitch={() => setPage("login")} 
-              onMessage={handleMessage} 
+          )}
+          {page === "register" && (
+            <Register
+              onSwitch={goToLogin}
+              onMessage={setMessage}
             />
           )}
         </div>
