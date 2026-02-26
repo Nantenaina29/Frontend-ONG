@@ -2,7 +2,7 @@ import { useState } from "react";
 import axiosClient from "../axiosClient";
 import "../style.css";
 import { FaEnvelope, FaLock, FaSignInAlt } from "react-icons/fa";
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2'; // Aza hadino ny nanafatra ity
 
 export default function Login({ onSwitch, onLoginSuccess }) {
   const [email, setEmail] = useState("");
@@ -14,60 +14,68 @@ export default function Login({ onSwitch, onLoginSuccess }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLocalMessage({ text: "", type: "" });
-
+  
     if (!email || !password) {
       setLocalMessage({ text: "Veuillez remplir tous les champs.", type: "error" });
       return;
     }
-
+  
     setLoading(true);
     try {
-      // Mandefa fangatahana any amin'ny Backend
+      // ESOA NY MANUAL CSRF - NO CSRF NEEDED!
+      // await axiosClient.get("https://backend-ong-qarl.onrender.com/sanctum/csrf-cookie");
+      
       const res = await axiosClient.post('/login', { email, password });
-
+  
       if (res.data.token) {
-        localStorage.setItem("ACCESS_TOKEN", res.data.token);
-        // Alefa any amin'ny App.jsx ny angon'ny mpampiasa
-        onLoginSuccess(res.data.user);
+        localStorage.setItem("ACCESS_TOKEN", res.data.token);  // ← standard name
+        console.log('✅ Login OK:', res.data.user);
       }
+  
+      onLoginSuccess(res.data.user);
     } catch (err) {
-      console.error('Login error:', err.response?.data);
+      console.error('❌ Login error:', err.response?.data);
       setLocalMessage({ 
-        text: err.response?.data?.message || "Identifiants incorrects ou erreur serveur.", 
+        text: err.response?.data?.message || "Erreur lors de la connexion !", 
         type: "error" 
       });
     } finally {
       setLoading(false);
     }
   };
+  
 
-  // 2. Lojika ho an'ny Mot de passe oublié
   const handleForgotPassword = () => {
     Swal.fire({
       title: 'Réinitialisation',
-      text: 'Entrez votre email pour recevoir un nouveau mot de passe',
+      text: 'Entrez votre adresse email pour recevoir un nouveau mot de passe',
       input: 'email',
       inputPlaceholder: 'Votre email',
       showCancelButton: true,
-      confirmButtonText: 'Envoyer',
-      confirmButtonColor: '#10b981',
+      cancelButtonText: 'Annuler',
+      confirmButtonText: 'Envoyer',  
       cancelButtonColor: '#d33',
+      confirmButtonColor: '#10b981',
       showLoaderOnConfirm: true,
       preConfirm: async (emailValue) => {
         try {
-          // Tandremo ny path eto: raha efa misy /api ny axiosClient dia '/forgot-password' fotsiny
-          const response = await axiosClient.post('/forgot-password', { email: emailValue });
+          // Appel API vers votre Backend PHP/Laravel
+          const response = await axiosClient.post('/api/forgot-password', { email: emailValue });
           return response.data;
         } catch (error) {
           Swal.showValidationMessage(
-            `Erreur: ${error.response?.data?.message || "Email non trouvé"}`
+            `Erreur: ${error.response?.data?.message || "Impossible d'envoyer l'email"}`
           );
         }
       },
       allowOutsideClick: () => !Swal.isLoading()
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire('Succès !', 'Vérifiez votre boîte mail.', 'success');
+        Swal.fire(
+          'Succès !',
+          'Un nouveau mot de passe a été envoyé à votre adresse email.',
+          'success'
+        );
       }
     });
   };
@@ -79,7 +87,7 @@ export default function Login({ onSwitch, onLoginSuccess }) {
            <FaSignInAlt className="header-icon big-icon" />
         </div>
         <h2>Connexion</h2>
-        <p>Espace de gestion ONG TAF</p>
+        <p>Accédez à votre espace de gestion administrative</p>
       </div>
 
       {localMessage.text && (
@@ -89,14 +97,17 @@ export default function Login({ onSwitch, onLoginSuccess }) {
       )}
 
       <form onSubmit={handleLogin} className="login-form-content">
+        {/* INPUT EMAIL */}
         <div className="input-group">
-          <label className="input-label">Email</label>
+          <label className="input-label">Identifiant (Email)</label>
           <div className="input-relative">
-            <span className="input-icon"><FaEnvelope /></span>
+            <span className="input-icon">
+              <FaEnvelope />
+            </span>
             <input
               type="email"
               className="custom-input"
-              placeholder="votre@email.com"
+              placeholder="Adresse email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -104,36 +115,49 @@ export default function Login({ onSwitch, onLoginSuccess }) {
           </div>
         </div>
 
+        {/* INPUT PASSWORD */}
         <div className="input-group">
           <label className="input-label">Mot de passe</label>
           <div className="input-relative">
-            <span className="input-icon"><FaLock /></span>
+            <span className="input-icon">
+              <FaLock />
+            </span>
             <input
               type="password"
               className="custom-input"
-              placeholder="••••••••"
+              placeholder="Mot de passe"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-          <div className="forgot-password-container" style={{ textAlign: 'right', marginTop: '8px' }}>
-            <span className="link-forgot" onClick={handleForgotPassword} style={{ cursor: 'pointer', fontSize: '0.85rem' }}>
+          
+          {/* LIEN MOT DE PASSE OUBLIE */}
+          <div className="forgot-password-container" style={{ textAlign: 'right', marginTop: '5px' }}>
+            <span 
+              className="link-forgot" 
+              onClick={handleForgotPassword}
+              style={{ cursor: 'pointer', fontSize: '0.85rem', color: '#64748b' }}
+            >
               Mot de passe oublié ?
             </span>
           </div>
         </div>
 
         <button type="submit" disabled={loading} className="btn-submit big-btn">
-          {loading ? "Chargement..." : "Se connecter"}
+          {loading ? "En attente..." : (
+            <>
+              <FaSignInAlt /> <span>Se connecter </span>
+            </>
+          )}
         </button>
       </form>
 
       <div className="form-footer">
         <p>
-          Nouveau membre ?{" "}
-          <span className="link-switch" onClick={onSwitch} style={{ cursor: 'pointer', fontWeight: 'bold' }}>
-            S'inscrire
+          Vous n'avez pas encore de compte ?{" "}
+          <span className="link-switch" onClick={onSwitch}>
+            S'inscrire ici
           </span>
         </p>
       </div>
