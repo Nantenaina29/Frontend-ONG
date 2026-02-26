@@ -21,19 +21,20 @@ export default function App() {
   };
 
 // App.jsx
-// App.jsx
-const handleLoginSuccess = (userData) => {
-  setUser(userData);
-  
-  // Terena ho 'dashboard' ny hash mba tsy hisy conflict
-  window.location.hash = "dashboard"; 
-  setPage("dashboard");
-  
-  // Tehirizo vetivety ny user ao amin'ny localStorage mba ho hita ao amin'ny Dashboard
-  localStorage.setItem("user", JSON.stringify(userData));
-  
-  setMessage({ text: "Connexion réussie !", type: "success" });
-};
+
+    const handleLoginSuccess = (userData) => {
+      // 1. Tehirizina ny user state
+      setUser(userData);
+      
+      // 2. Terena ho any amin'ny dashboard ny hash
+      window.location.hash = "dashboard"; 
+      
+      // 3. Ovaina ny pejy
+      setPage("dashboard");
+      
+      // 4. Hafatra fahombiazana
+      setMessage({ text: "Connexion réussie !", type: "success" });
+    };
 
 
 
