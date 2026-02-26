@@ -21,11 +21,18 @@ import TrashPage from "./TrashPage";
 import SettingsPage from "./SettingsPage";
 
 export default function Dashboard({ user, setUser, onLogout, onGoToLogin }) {
-  // 1. Averina ho "home" foana ny sanda voalohany
-  const [activePage, setActivePage] = useState("home");
+
+  // VAHAOLANA PERFECT: Jerena raha efa nanao login tany amin'ny App
+  const [activePage, setActivePage] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    // Raha vao misy 'user' avy amin'ny props NA ao amin'ny storage dia 'statistiques'
+    return (user || savedUser) ? "statistiques" : "home";
+  });
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
+  // Hanavaozana ny activePage raha vao miova ny 'user' (Login)
   useEffect(() => {
     if (user) {
       setActivePage("statistiques");

@@ -20,22 +20,21 @@ export default function App() {
     setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
   };
 
-  const handleLoginSuccess = (userData) => {
-    // 1. Omeo sanda ny User voalohany indrindra
-    setUser(userData);
-    
-    // 2. Tehirizo ny token
-    // (Efa nataonao ao amin'ny Login.jsx angamba ity, fa tsara raha jerena)
-    
-    // 3. Izay vao miova pejy
-    setPage("dashboard");
-    window.location.hash = "dashboard";
-  };
-
-// App.jsx
+  // App.jsx
+const handleLoginSuccess = (userData) => {
+  // 1. Tehirizina ao amin'ny state
+  setUser(userData);
+  
+  // 2. TEHIRIZINA AO AMIN'NY STORAGE (Zava-dehibe!)
+  localStorage.setItem("user", JSON.stringify(userData));
+  
+  // 3. Ovaina ny pejy
+  setPage("dashboard");
+  window.location.hash = "dashboard";
+};
 
           const handleLogout = () => {
-            localStorage.removeItem("token");
+            localStorage.removeItem("ACCESS_TOKEN");
             localStorage.removeItem("user"); // Fadio koa ny user ao amin'ny storage
             setUser(null);
             setPage("login"); // Na inona na inona anaran'ny pejy fidirana ao aminao
