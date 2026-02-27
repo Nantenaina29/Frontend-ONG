@@ -6,17 +6,14 @@ import MainPage from "./components/MainPage";
 import "./style.css";
 
 export default function App() {
+  const [page, setPage] = useState("home"); 
+
+  // 2. Alaina ny user raha misy, fa tsy mandidy ny pejy haseho avy hatrany
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
     try {
       return savedUser ? JSON.parse(savedUser) : null;
     } catch { return null; }
-  });
-
-  // Jereo raha efa tao amin'ny Dashboard izy teo aloha
-  const [page, setPage] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? "dashboard" : "home";
   });
 
   const [message, setMessage] = useState({ text: "", type: "success" });
