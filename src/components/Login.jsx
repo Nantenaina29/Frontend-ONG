@@ -8,38 +8,55 @@ export default function Login({ onSwitch, onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [localMessage, setLocalMessage] = useState({ text: "", type: "" });
+
 
   // 1. LOGIN PRINCIPAL - AVEC DEBUG COMPLET
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLocalMessage({ text: "", type: "" });
     setLoading(true);
-  
-    try {
-      const res = await axiosClient.post('/login', { 
-        email: email, 
-        password: password 
-      });
-  
-      // Checking the clean structure from your AuthController
-      if (res.data && res.data.token) {
-        localStorage.setItem("ACCESS_TOKEN", res.data.token);
-        
-        console.log('Login successful');
-        onLoginSuccess(res.data.user); 
-      }
-    } catch (err) {
-      // This catches 401 (Unauthorized) and 500 (Server Error)
-      const message = err.response?.data?.message || "Server error. Please check your connection.";
-      setLocalMessage({ text: message, type: "error" });
-      
-      console.error('API Error:', err.response?.status, err.response?.data);
-    } finally {
-      setLoading(false);
-    }
-  };
 
+    try {
+        const res = await axiosClient.post('/login', { 
+            email: email, 
+            password: password 
+        });
+
+        if (res.data && res.data.token) {
+            // 1. Tehirizina ny Token
+            localStorage.setItem("ACCESS_TOKEN", res.data.token);
+            
+            // 2. Swal fahombiazana
+            Swal.fire({
+                icon: 'success',
+                title: 'Tafiditra soa aman-tsara!',
+                text: 'Andraso kely, hamindra anao izahay...',
+                timer: 2000,
+                showConfirmButton: false,
+                timerProgressBar: true,
+            });
+
+            // 3. Antsoina ny onLoginSuccess rehefa avy eo
+            setTimeout(() => {
+                onLoginSuccess(res.data.user);
+            }, 2000);
+        }
+    } catch (err) {
+        // Ity no mandray ny 401, 422, na 500
+        const message = err.response?.data?.message || "Nisy olana teo amin'ny server. Jereo ny fifandraisanao.";
+        
+        Swal.fire({
+            icon: 'error',
+            title: 'Fidirana nolavina',
+            text: message,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Haverina indray'
+        });
+
+        console.error('API Error:', err.response?.status, err.response?.data);
+    } finally {
+        setLoading(false);
+    }
+};
   // 2. MOT DE PASSE OUBLIÉ
   const handleForgotPassword = () => {
     Swal.fire({
@@ -89,13 +106,6 @@ export default function Login({ onSwitch, onLoginSuccess }) {
         <h2>Connexion</h2>
         <p>Accédez à votre espace de gestion administrative</p>
       </div>
-
-      {/* MESSAGE */}
-      {localMessage.text && (
-        <div className={`msg-box ${localMessage.type === "error" ? "msg-error" : "msg-success"}`}>
-          {localMessage.text}
-        </div>
-      )}
 
       {/* FORM */}
       <form onSubmit={handleLogin} className="login-form-content">
