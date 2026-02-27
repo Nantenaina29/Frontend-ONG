@@ -203,7 +203,7 @@ if (!user) {
 
           <footer className="main-footer">
           <span>© {new Date().getFullYear()} ONG TSINJO AINA FIANARANTSOA - Système de Gestion Intégrée</span>
-          <span className="dev-credit">Développé par : Elysé R.</span>
+          <span className="dev-credit">Développé par : Elysé RANDRIANANTENAINA</span>
         </footer>
         </main>
       </div>
