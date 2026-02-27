@@ -6,10 +6,7 @@ import MainPage from "./components/MainPage";
 import "./style.css";
 
 export default function App() {
-  // 1. Ny "page" foana no mibaiko (Start at "home")
   const [page, setPage] = useState("home");
-  
-  // 2. Ny "user" alaina avy amin'ny localStorage raha misy
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
     try {
@@ -20,7 +17,7 @@ export default function App() {
   const handleLoginSuccess = (userData) => {
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
-    setPage("dashboard"); // Mifindra Dashboard avy hatrany
+    setPage("dashboard");
   };
 
   const handleLogout = () => {
@@ -29,46 +26,33 @@ export default function App() {
     setPage("home");
   };
 
-  // --- RENDERING ---
-
-  // Raha vao dashboard ny pejy sady misy user
+  // 1. RAHA TAFIDITRA (Dashboard)
   if (page === "dashboard" && user) {
     return <Dashboard user={user} setUser={setUser} onLogout={handleLogout} />;
   }
 
-  // Raha tsy izany, ireto pejy ireto no aseho
+  // 2. RAHA PEJY FANDRAISANA (MainPage feno pejy - Full Screen)
+  if (page === "home") {
+    return <MainPage onGoToLogin={() => setPage("login")} />;
+  }
+
+  // 3. RAHA LOGIN NA REGISTER (Vao mipoitra ilay misy sisiny ankavia)
   return (
-<div className="login-page">
+    <div className="login-page">
       <div className="brand-panel">
         <div className="brand-content">
           <img src="/Logo TAF 3D.png" alt="Logo TAF3D" className="brand-logo" />
-          
-          <h1 className="brand-title">
-            ONG <span>Tsinjo Aina Fianarantsoa</span>
-          </h1>
-
-          {/* Eto ireo paragraphe rehetra nanjavona teo */}
+          <h1 className="brand-title">ONG <span>Tsinjo Aina Fianarantsoa</span></h1>
           <div className="brand-text-content">
             <p className="brand-description">
               "Promouvoir un développement durable et inclusif au cœur de la Haute Matsiatra."
             </p>
-            
-            <p className="brand-mission">
-              Notre mission est d'accompagner les communautés locales vers une autonomie 
-              réelle à travers l'éducation, la formation technique et le soutien social.
-            </p>
-
-            <div className="brand-motto">
-              <span>Solidarité</span> • <span>Développement</span> • <span>Avenir</span>
-            </div>
           </div>
         </div>
       </div>
 
       <div className="form-panel">
         <div className="auth-dynamic-content">
-          
-          
           {page === "login" && (
             <Login
               onSwitch={() => setPage("register")}
