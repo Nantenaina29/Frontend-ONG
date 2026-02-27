@@ -37,20 +37,20 @@ export default function App() {
     setPage("register");
   };
 
-  const handleLoginSuccess = (userData) => {
-    // 1. Tehirizina avy hatrany ny user (Synchronization)
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
-    
-    // 2. Miandry kely (100ms fotsiny) mba ho azo antoka fa voavaky ny state vao miova pejy
-    setTimeout(() => {
-      setPage("dashboard");
-      setMessage({ text: "Connexion réussie !", type: "success" });
-    }, 100);
-
-    // 3. Fafana ny message aorian'ny 3s (Tsy kitihina ny setPage ato)
-    setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
-  };
+      const handleLoginSuccess = (userData) => {
+        // 1. Tehirizo ALOHA ny data rehetra
+        localStorage.setItem("user", JSON.stringify(userData));
+        
+        // 2. Ovaina miaraka ny user sy ny page (Synchronized update)
+        setUser(userData);
+        setPage("dashboard");
+      
+        // 3. Hafatra fahombiazana (Tsy mampihetsika setPage intsony ny timeout eto)
+        setMessage({ text: "Connexion réussie !", type: "success" });
+        setTimeout(() => {
+          setMessage({ text: "", type: "success" });
+        }, 3000);
+      };
 
   const handleLogout = () => {
     localStorage.removeItem("ACCESS_TOKEN");
@@ -59,19 +59,15 @@ export default function App() {
     setPage("home");
   };
 
-  // 5. RENDERING LOGIC
-  
-  // A. Dashboard (ihitany ihany raha page === "dashboard" SY misy user)
-  if (page === "dashboard" && user) {
-    return (
-      <Dashboard 
-        user={user} 
-        setUser={setUser} 
-        onLogout={handleLogout} 
-      />
-    );
-  }
-
+      if (page === "dashboard") {
+        return (
+          <Dashboard 
+            user={user} 
+            setUser={setUser} 
+            onLogout={handleLogout} 
+          />
+        );
+      }
   // B. Public Pages
   return (
     <div className="login-page">
