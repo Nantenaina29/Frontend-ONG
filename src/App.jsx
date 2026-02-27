@@ -1,4 +1,4 @@
-// App.jsx - PERFECT VERSION
+// App.jsx - Version Corrigée et Synchronisée
 import { useState, useEffect } from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -7,32 +7,46 @@ import MainPage from "./components/MainPage";
 import "./style.css";
 
 export default function App() {
-  const [page, setPage] = useState("home");  // MainPage par défaut
-  const [user, setUser] = useState(null);
+  // 1. Initialisation avy amin'ny localStorage mba tsy hovonoina rehefa refresh
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    try {
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch  {
+      return null;
+    }
+  });
+
+  // 2. Raha efa misy user dia mandeha dashboard, raha tsy izany dia home
+  const [page, setPage] = useState(() => {
+    return localStorage.getItem("user") ? "dashboard" : "home";
+  });
+
   const [message, setMessage] = useState({ text: "", type: "success" });
 
-  // Hash sync
+  // 3. Hash sync - manampy ny navigation ao amin'ny navigateur
   useEffect(() => {
     window.location.hash = page;
   }, [page]);
 
-  // FUNCTIONS
+  // 4. FUNCTIONS
   const goToLogin = () => {
     setPage("login");
-    window.location.hash = "login";
   };
 
   const goToRegister = () => {
     setPage("register");
-    window.location.hash = "register";
   };
 
   const handleLoginSuccess = (userData) => {
-    setUser(userData);
+    // Tehirizina aloha vao ovaina ny state
     localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
     setPage("dashboard");
-    window.location.hash = "dashboard";
     setMessage({ text: "Connexion réussie !", type: "success" });
+    
+    // Fafana ny message aorian'ny 3 segondra
+    setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
   };
 
   const handleLogout = () => {
@@ -40,10 +54,11 @@ export default function App() {
     localStorage.removeItem("user");
     setUser(null);
     setPage("home");
-    window.location.hash = "home";
   };
 
-  // 1. DASHBOARD (user logged)
+  // 5. RENDERING LOGIC
+  
+  // A. Raha tafiditra ny mpampiasa (Dashboard)
   if (page === "dashboard" && user) {
     return (
       <Dashboard 
@@ -54,7 +69,7 @@ export default function App() {
     );
   }
 
-  // 2. LOGIN/REGISTER/HOME (public pages)
+  // B. Pejy ho an'ny daholobe (Public Pages)
   return (
     <div className="login-page">
       {/* PANEL ANKAVIA - Brand Content */}
@@ -78,14 +93,16 @@ export default function App() {
             </div>
           )}
 
-          {/* PERFECT SWITCHING */}
+          {/* SWITCHING LOGIC */}
           {page === "home" && <MainPage onGoToLogin={goToLogin} />}
-          {page === "login" && (
+          
+          {(page === "login" || (page === "dashboard" && !user)) && (
             <Login
               onSwitch={goToRegister}
               onLoginSuccess={handleLoginSuccess}
             />
           )}
+
           {page === "register" && (
             <Register
               onSwitch={goToLogin}

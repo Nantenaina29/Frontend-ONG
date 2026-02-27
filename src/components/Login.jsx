@@ -22,24 +22,24 @@ export default function Login({ onSwitch, onLoginSuccess }) {
         });
 
         if (res.data && res.data.token) {
-            // 1. Stockage du Token
-            localStorage.setItem("ACCESS_TOKEN", res.data.token);
-            
-            // 2. Notification de succès (SweetAlert2)
-            Swal.fire({
-                icon: 'success',
-                title: 'Connexion réussie !',
-                text: 'Veuillez patienter, nous vous redirigeons...',
-                timer: 2000,
-                showConfirmButton: false,
-                timerProgressBar: true,
-            });
+          // 1. Tehirizo ny Token sy ny User aloha vao manao SweetAlert
+          localStorage.setItem("ACCESS_TOKEN", res.data.token);
+          // Ity no nampiana mba ho azo antoka
+          localStorage.setItem("user", JSON.stringify(res.data.user)); 
+          
+          Swal.fire({
+              icon: 'success',
+              title: 'Connexion réussie !',
+              text: 'Veuillez patienter...',
+              timer: 1500, // Nahena kely ny fotoana
+              showConfirmButton: false,
+              timerProgressBar: true,
+          });
 
-            // 3. Appel de onLoginSuccess après le délai
-            setTimeout(() => {
-                onLoginSuccess(res.data.user);
-            }, 2000);
-        }
+          setTimeout(() => {
+              onLoginSuccess(res.data.user);
+          }, 1500);
+      }
     } catch (err) {
         // Gestion des erreurs 401, 422, ou 500
         const message = err.response?.data?.message || "Un problème est survenu sur le serveur. Veuillez vérifier votre connexion.";
