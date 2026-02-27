@@ -14,39 +14,27 @@ export default function Login({ onSwitch, onLoginSuccess }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLocalMessage({ text: "", type: "" });
-  
-    if (!email || !password) {
-      setLocalMessage({ text: "Please fill in all fields.", type: "error" });
-      return;
-    }
-  
     setLoading(true);
   
     try {
-      // API Call to Render backend
-      const res = await axiosClient.post('/login', { email, password });
+      const res = await axiosClient.post('/login', { 
+        email: email, 
+        password: password 
+      });
   
-      const { token, user } = res.data;
-  
-      if (token && user) {
-        // 1. Store the token for API authorization
-        localStorage.setItem("ACCESS_TOKEN", token);
-        
-        // 2. Note: We do not persist the user object in localStorage 
-        // per your requirement to reset on refresh.
+      // Checking the clean structure from your AuthController
+      if (res.data && res.data.token) {
+        localStorage.setItem("ACCESS_TOKEN", res.data.token);
         
         console.log('Login successful');
-        
-        // 3. Trigger the success state in App.jsx
-        onLoginSuccess(user); 
-      } else {
-        setLocalMessage({ text: "Invalid server response.", type: "error" });
+        onLoginSuccess(res.data.user); 
       }
     } catch (err) {
-      // Capture 401 Unauthorized or other server errors
-      const errorMessage = err.response?.data?.message || "Server error. Please try again.";
-      setLocalMessage({ text: errorMessage, type: "error" });
-      console.error('Login Error:', err.response?.status, err.response?.data);
+      // This catches 401 (Unauthorized) and 500 (Server Error)
+      const message = err.response?.data?.message || "Server error. Please check your connection.";
+      setLocalMessage({ text: message, type: "error" });
+      
+      console.error('API Error:', err.response?.status, err.response?.data);
     } finally {
       setLoading(false);
     }
