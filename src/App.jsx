@@ -6,39 +6,25 @@ import MainPage from "./components/MainPage";
 import "./style.css";
 
 export default function App() {
-  // 1. User state
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
     try {
       return savedUser ? JSON.parse(savedUser) : null;
-    } catch {
-      return null;
-    }
+    } catch { return null; }
   });
 
-  // 2. Page state - "home" foana no voalohany rehefa sokafana
   const [page, setPage] = useState("home"); 
   const [message, setMessage] = useState({ text: "", type: "success" });
 
-  // 3. Hash sync
   useEffect(() => {
     window.location.hash = page;
   }, [page]);
 
-  // 4. FUNCTIONS
-  const goToLogin = () => setPage("login");
-  const goToRegister = () => setPage("register");
-
   const handleLoginSuccess = (userData) => {
-    // Tehirizina ny data aloha vao ovaina ny state
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
-    
-    // Mandroso avy hatrany any amin'ny dashboard
     setPage("dashboard"); 
-    
     setMessage({ text: "Connexion réussie !", type: "success" });
-    setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
   };
 
   const handleLogout = () => {
@@ -48,9 +34,9 @@ export default function App() {
     setPage("home");
   };
 
-  // --- RENDERING LOGIC ---
-
-  // A. RAHA DASHBOARD (Ity irery no miseho, tsy misy zavatra hafa)
+  // ==========================================
+  // 1. LOJIKA HO AN'NY DASHBOARD IRERY
+  // ==========================================
   if (page === "dashboard") {
     return (
       <Dashboard 
@@ -61,16 +47,16 @@ export default function App() {
     );
   }
 
-  // B. PUBLIC PAGES (Home, Login, Register)
+  // ==========================================
+  // 2. LOJIKA HO AN'NY PEJY HAFA (Home, Login, Register)
+  // ==========================================
   return (
     <div className="login-page">
       <div className="brand-panel">
         <div className="brand-content">
           <img src="/Logo TAF 3D.png" alt="Logo TAF3D" className="brand-logo" />
           <h1 className="brand-title">ONG <span>Tsinjo Aina Fianarantsoa</span></h1>
-          <p className="brand-description">
-            "Promouvoir un développement durable et inclusif au cœur de la Haute Matsiatra..."
-          </p>
+          <p className="brand-description">"Promouvoir un développement durable..."</p>
           <div className="brand-footer-info">Région Haute Matsiatra • Madagascar</div>
         </div>
       </div>
@@ -83,19 +69,19 @@ export default function App() {
             </div>
           )}
 
-          {/* Logic Switch tsotra sy madio */}
-          {page === "home" && <MainPage onGoToLogin={goToLogin} />}
+          {/* Eto dia fepetra tsotra sisa: Home, Login, na Register */}
+          {page === "home" && <MainPage onGoToLogin={() => setPage("login")} />}
           
           {page === "login" && (
             <Login
-              onSwitch={goToRegister}
+              onSwitch={() => setPage("register")}
               onLoginSuccess={handleLoginSuccess}
             />
           )}
 
           {page === "register" && (
             <Register
-              onSwitch={goToLogin}
+              onSwitch={() => setPage("login")}
               onMessage={setMessage}
             />
           )}
