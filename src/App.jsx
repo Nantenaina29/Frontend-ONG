@@ -20,12 +20,30 @@ export default function App() {
     window.location.hash = page;
   }, [page]);
 
-  const handleLoginSuccess = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
-    setPage("dashboard"); 
-    setMessage({ text: "Connexion réussie !", type: "success" });
-  };
+    const handleLoginSuccess = (userData) => {
+      try {
+        // 1. Sauvegarde des données utilisateur
+        localStorage.setItem("user", JSON.stringify(userData));
+        setUser(userData);
+        
+        // 2. Changement de page vers le tableau de bord
+        setPage("dashboard");
+        
+        // 3. Message de confirmation
+        setMessage({ text: "Connexion réussie ! Redirection en cours...", type: "success" });
+        
+        console.log("Succès : Redirection vers le tableau de bord...");
+
+        // Nettoyage du message après 3 secondes
+        setTimeout(() => {
+          setMessage({ text: "", type: "success" });
+        }, 3000);
+
+      } catch (error) {
+        console.error("Erreur lors de la connexion :", error);
+        setMessage({ text: "Une erreur est survenue lors de la redirection.", type: "error" });
+      }
+    };
 
   const handleLogout = () => {
     localStorage.removeItem("ACCESS_TOKEN");

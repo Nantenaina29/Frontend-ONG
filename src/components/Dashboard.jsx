@@ -57,6 +57,15 @@ export default function Dashboard({ user, setUser, onLogout }) {
     setSidebarOpen(false);
   };
 
+  // À mettre au début du composant Dashboard
+if (!user) {
+  return (
+    <div className="loading-container">
+      <p>Chargement de votre session, veuillez patienter...</p>
+    </div>
+  );
+}
+
   return (
     <div className={`dashboard-container ${darkMode ? "dark-theme" : ""}`}>
       {/* TOP NAVBAR */}
