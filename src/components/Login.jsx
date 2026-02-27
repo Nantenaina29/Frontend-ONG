@@ -16,44 +16,41 @@ export default function Login({ onSwitch, onLoginSuccess }) {
     setLocalMessage({ text: "", type: "" });
   
     if (!email || !password) {
-      setLocalMessage({ text: "Veuillez remplir tous les champs.", type: "error" });
+      setLocalMessage({ text: "Please fill in all fields.", type: "error" });
       return;
     }
   
     setLoading(true);
+  
     try {
+      // API Call to Render backend
       const res = await axiosClient.post('/login', { email, password });
-      
-      // 🎯 FLEXIBLE - marche avec TOUS backend responses
-      let token = res.data.token;
-      let user = res.data.user;
-      
-      // Alternative structures
-      if (!token && res.data.data) {
-        token = res.data.data.token;
-        user = res.data.data.user;
-      }
-      
-      console.log('TOKEN:', token);
-      console.log('USER:', user);
+  
+      const { token, user } = res.data;
   
       if (token && user) {
+        // 1. Store the token for API authorization
         localStorage.setItem("ACCESS_TOKEN", token);
-        localStorage.setItem("user", JSON.stringify(user));
-        console.log('🚀 LOGIN OK → Dashboard!');
-        onLoginSuccess(user);  // 🎉 DASHBOARD!
+        
+        // 2. Note: We do not persist the user object in localStorage 
+        // per your requirement to reset on refresh.
+        
+        console.log('Login successful');
+        
+        // 3. Trigger the success state in App.jsx
+        onLoginSuccess(user); 
       } else {
-        setLocalMessage({ text: "Identifiants incorrects", type: "error" });
+        setLocalMessage({ text: "Invalid server response.", type: "error" });
       }
     } catch (err) {
-      const message = err.response?.data?.message || "Erreur serveur";
-      setLocalMessage({ text: message, type: "error" });
-      console.error('ERROR:', err.response?.status, err.response?.data);
+      // Capture 401 Unauthorized or other server errors
+      const errorMessage = err.response?.data?.message || "Server error. Please try again.";
+      setLocalMessage({ text: errorMessage, type: "error" });
+      console.error('Login Error:', err.response?.status, err.response?.data);
     } finally {
       setLoading(false);
     }
   };
-  
 
   // 2. MOT DE PASSE OUBLIÉ
   const handleForgotPassword = () => {
