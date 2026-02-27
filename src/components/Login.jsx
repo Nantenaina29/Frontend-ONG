@@ -111,12 +111,14 @@ export default function Login({ onSwitch, onLoginSuccess }) {
       <form onSubmit={handleLogin} className="login-form-content">
         {/* EMAIL */}
         <div className="input-group">
-          <label className="input-label">Identifiant (Email)</label>
+          <label htmlFor="login-email" className="input-label">Identifiant (Email)</label>
           <div className="input-relative">
             <span className="input-icon">
               <FaEnvelope />
             </span>
             <input
+              id="login-email"
+              name="email"
               type="email"
               className="custom-input"
               placeholder="Adresse email"
@@ -124,18 +126,21 @@ export default function Login({ onSwitch, onLoginSuccess }) {
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={loading}
+              autoComplete="email"
             />
           </div>
         </div>
 
         {/* PASSWORD + OUBLIÉ */}
         <div className="input-group">
-          <label className="input-label">Mot de passe</label>
+          <label htmlFor="login-password" className="input-label">Mot de passe</label>
           <div className="input-relative">
             <span className="input-icon">
               <FaLock />
             </span>
             <input
+              id="login-password"
+              name="password"
               type="password"
               className="custom-input"
               placeholder="Mot de passe"
@@ -143,6 +148,7 @@ export default function Login({ onSwitch, onLoginSuccess }) {
               onChange={(e) => setPassword(e.target.value)}
               required
               disabled={loading}
+              autoComplete="current-password"
             />
           </div>
           

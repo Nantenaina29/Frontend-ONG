@@ -97,10 +97,12 @@ export default function Register({ onSwitch }) {
       <form onSubmit={handleRegister}>
         <div className="form-row">
           <div className="input-group">
-            <label className="input-label">Nom Complet</label>
+            <label htmlFor="reg-name" className="input-label">Nom Complet</label>
             <div className="input-relative">
               <span className="input-icon"><FaUser /></span>
               <input 
+                id="reg-name"
+                name="name"
                 type="text" 
                 className="custom-input" 
                 placeholder="Nom" 
@@ -111,10 +113,12 @@ export default function Register({ onSwitch }) {
             </div>
           </div>
           <div className="input-group">
-            <label className="input-label">Email</label>
+            <label htmlFor="reg-email" className="input-label">Email</label>
             <div className="input-relative">
               <span className="input-icon"><FaEnvelope /></span>
               <input 
+                id="reg-email"
+                name="email"
                 type="email" 
                 className="custom-input" 
                 placeholder="Adresse email" 
@@ -128,10 +132,12 @@ export default function Register({ onSwitch }) {
 
         <div className="form-row">
           <div className="input-group">
-            <label className="input-label">Mot de passe</label>
+            <label htmlFor="reg-password" className="input-label">Mot de passe</label>
             <div className="input-relative">
               <span className="input-icon"><FaLock /></span>
               <input 
+                id="reg-password"
+                name="password"
                 type="password" 
                 className="custom-input" 
                 placeholder="Mot de passe" 
@@ -142,10 +148,12 @@ export default function Register({ onSwitch }) {
             </div>
           </div>
           <div className="input-group">
-            <label className="input-label">Code PIN</label>
+            <label htmlFor="reg-pincode" className="input-label">Code PIN</label>
             <div className="input-relative">
               <span className="input-icon"><FaKey /></span>
               <input 
+                id="reg-pincode"
+                name="pincode"
                 type="password" 
                 className="custom-input" 
                 placeholder="PIN" 
