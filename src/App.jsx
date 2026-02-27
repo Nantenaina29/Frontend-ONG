@@ -1,4 +1,4 @@
-// App.jsx - Version Corrigée et Synchronisée
+// App.jsx - Version synchronisée (Force Home au démarrage)
 import { useState, useEffect } from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -7,24 +7,23 @@ import MainPage from "./components/MainPage";
 import "./style.css";
 
 export default function App() {
-  // 1. Initialisation avy amin'ny localStorage mba tsy hovonoina rehefa refresh
+  // 1. User state: vakiana ny storage fa apetraka ho null raha vao manomboka ny app
+  // Mba hahafahana manao login indray
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
     try {
       return savedUser ? JSON.parse(savedUser) : null;
-    } catch  {
+    } catch {
       return null;
     }
   });
 
-  // 2. Raha efa misy user dia mandeha dashboard, raha tsy izany dia home
-  const [page, setPage] = useState(() => {
-    return localStorage.getItem("user") ? "dashboard" : "home";
-  });
+  // 2. FORCE HOME: Na inona na inona nisy teo aloha, pejy "home" foana no misokatra voalohany
+  const [page, setPage] = useState("home"); 
 
   const [message, setMessage] = useState({ text: "", type: "success" });
 
-  // 3. Hash sync - manampy ny navigation ao amin'ny navigateur
+  // 3. Hash sync
   useEffect(() => {
     window.location.hash = page;
   }, [page]);
@@ -39,13 +38,11 @@ export default function App() {
   };
 
   const handleLoginSuccess = (userData) => {
-    // Tehirizina aloha vao ovaina ny state
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
     setPage("dashboard");
     setMessage({ text: "Connexion réussie !", type: "success" });
     
-    // Fafana ny message aorian'ny 3 segondra
     setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
   };
 
@@ -58,7 +55,7 @@ export default function App() {
 
   // 5. RENDERING LOGIC
   
-  // A. Raha tafiditra ny mpampiasa (Dashboard)
+  // A. Dashboard (ihitany ihany raha page === "dashboard" SY misy user)
   if (page === "dashboard" && user) {
     return (
       <Dashboard 
@@ -69,22 +66,20 @@ export default function App() {
     );
   }
 
-  // B. Pejy ho an'ny daholobe (Public Pages)
+  // B. Public Pages
   return (
     <div className="login-page">
-      {/* PANEL ANKAVIA - Brand Content */}
       <div className="brand-panel">
         <div className="brand-content">
           <img src="/Logo TAF 3D.png" alt="Logo TAF3D" className="brand-logo" />
           <h1 className="brand-title">ONG <span>Tsinjo Aina Fianarantsoa</span></h1>
           <p className="brand-description">
-            "Promouvoir un développement durable et inclusif au cœur de la Haute Matsiatra..."
+            "Promouvoir un development durable et inclusif au cœur de la Haute Matsiatra..."
           </p>
           <div className="brand-footer-info">Région Haute Matsiatra • Madagascar</div>
         </div>
       </div>
 
-      {/* PANEL ANKAVANANA - Auth Forms */}
       <div className="form-panel">
         <div className="auth-dynamic-content">
           {message.text && (
@@ -93,10 +88,10 @@ export default function App() {
             </div>
           )}
 
-          {/* SWITCHING LOGIC */}
+          {/* Logic switch - Home foana no voalohany izao */}
           {page === "home" && <MainPage onGoToLogin={goToLogin} />}
           
-          {(page === "login" || (page === "dashboard" && !user)) && (
+          {page === "login" && (
             <Login
               onSwitch={goToRegister}
               onLoginSuccess={handleLoginSuccess}
@@ -107,6 +102,14 @@ export default function App() {
             <Register
               onSwitch={goToLogin}
               onMessage={setMessage}
+            />
+          )}
+
+          {/* Fiarovana: raha sendra tafiditra amin'ny dashboard nefa tsy misy user */}
+          {page === "dashboard" && !user && (
+            <Login
+              onSwitch={goToRegister}
+              onLoginSuccess={handleLoginSuccess}
             />
           )}
         </div>
