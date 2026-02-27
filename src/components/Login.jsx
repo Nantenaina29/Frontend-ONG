@@ -14,65 +14,38 @@ export default function Login({ onSwitch, onLoginSuccess }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLocalMessage({ text: "", type: "" });
-
-    // VALIDATION
+  
     if (!email || !password) {
       setLocalMessage({ text: "Veuillez remplir tous les champs.", type: "error" });
       return;
     }
-
+  
     setLoading(true);
     try {
-      console.log('🔥 Envoi login:', { email });
-
-      // API CALL
       const res = await axiosClient.post('/login', { email, password });
-
-      // DEBUG COMPLETE
-      console.log('✅ API RESPONSE FULL:', res.data);
-      console.log('✅ TOKEN:', res.data.token);
-      console.log('✅ USER:', res.data.user);
-
-      // CHECK STRUCTURE
-      if (res.data.token && res.data.user) {
-        localStorage.setItem("ACCESS_TOKEN", res.data.token);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        
-        console.log('🚀 LOGIN SUCCESS → Dashboard!');
-        onLoginSuccess(res.data.user);  // Dashboard!
-        
-      } else if (res.data.message) {
-        setLocalMessage({ 
-          text: res.data.message || "Email ou mot de passe incorrect!", 
-          type: "error" 
-        });
-        
-      } else {
-        console.error('❌ RESPONSE STRUCTURE:', res.data);
-        setLocalMessage({ 
-          text: "Réponse serveur tsy marina.", 
-          type: "error" 
-        });
-      }
-
-    } catch (err) {
-      console.error('❌ LOGIN ERROR:', err.response?.data || err.message);
       
-      // ERROR HANDLING
-      if (err.response?.status === 401) {
-        setLocalMessage({ text: "Email ou mot de passe incorrect!", type: "error" });
-      } else if (err.response?.status === 422) {
-        setLocalMessage({ text: err.response.data.message || "Données invalides", type: "error" });
+      // 🔥 CHECK EXACT RESPONSE
+      console.log('RESPONSE:', res.data);
+      
+      // Flexible structure - marche avec toutes les réponses backend
+      const token = res.data.token || res.data.data?.token;
+      const user = res.data.user || res.data.data?.user;
+      
+      if (token && user) {
+        localStorage.setItem("ACCESS_TOKEN", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        onLoginSuccess(user);  // Dashboard!
       } else {
-        setLocalMessage({ 
-          text: err.response?.data?.message || "Erreur serveur. Tasy aza.", 
-          type: "error" 
-        });
+        setLocalMessage({ text: "Login échoué - Vérifiez vos identifiants", type: "error" });
       }
+    } catch (err) {
+      console.error('ERROR:', err.response?.data);
+      setLocalMessage({ text: "Erreur serveur", type: "error" });
     } finally {
       setLoading(false);
     }
   };
+  
 
   // 2. MOT DE PASSE OUBLIÉ
   const handleForgotPassword = () => {
