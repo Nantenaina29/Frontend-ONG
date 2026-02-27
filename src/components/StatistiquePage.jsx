@@ -99,14 +99,16 @@ export default function StatistiquePage() {
     return { ageM, gsByYear, respData, statsTaranja, totalM, totalAutonome };
   }, [data]);
 
-  if (loading) {
-    return (
-      <div className="loading-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh', flexDirection: 'column' }}>
-        <div className="spinner"></div>
-        <p style={{ marginTop: '20px', fontWeight: 'bold', color: '#4e73df' }}>Chargement des données statistiques...</p>
-      </div>
-    );
-  }
+      if (loading) {
+        return (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh', flexDirection: 'column' }}>
+            <div className="spinner"></div>
+            <p style={{ marginTop: '20px', fontWeight: 'bold', color: '#4e73df' }}>
+              Chargement des données en cours... 
+            </p>
+          </div>
+        );
+      }
 
   return (
     <div className="stat-page-container" style={{ padding: '20px', backgroundColor: '#f8f9fc' }}> 

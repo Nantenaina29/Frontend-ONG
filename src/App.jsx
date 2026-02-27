@@ -23,9 +23,8 @@ export default function App() {
   const handleLoginSuccess = (userData) => {
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
-    setPage("dashboard"); 
-    setMessage({ text: "Connexion réussie ! Bienvenue.", type: "success" });
-    setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
+    setPage("dashboard"); // Mifindra ary mijanona ao!
+    setMessage({ text: "Connexion réussie !", type: "success" });
   };
 
   const handleLogout = () => {
@@ -35,7 +34,10 @@ export default function App() {
     setPage("home");
   };
 
-  // --- RENDU DU DASHBOARD (SÉCURISÉ) ---
+  // ==========================================
+  // LOJIKA VOALOHANY: RAHA PEJY DASHBOARD
+  // TSY ASY FEPETRA "&& user" ETO MBA TSY HANJAVONA INTSONY
+  // ==========================================
   if (page === "dashboard") {
     return (
       <Dashboard 
@@ -46,7 +48,9 @@ export default function App() {
     );
   }
 
-  // --- RENDU DES PAGES PUBLIQUES ---
+  // ==========================================
+  // LOJIKA FAHAROA: PEJY HAFA (Home, Login, Register)
+  // ==========================================
   return (
     <div className="login-page">
       <div className="brand-panel">
@@ -54,7 +58,6 @@ export default function App() {
           <img src="/Logo TAF 3D.png" alt="Logo TAF3D" className="brand-logo" />
           <h1 className="brand-title">ONG <span>Tsinjo Aina Fianarantsoa</span></h1>
           <p className="brand-description">"Promouvoir un développement durable..."</p>
-          <div className="brand-footer-info">Région Haute Matsiatra • Madagascar</div>
         </div>
       </div>
 
