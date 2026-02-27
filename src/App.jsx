@@ -6,13 +6,6 @@ import MainPage from "./components/MainPage";
 import "./style.css";
 
 export default function App() {
-  // 1. STATE INITIALISATION: Ity no lojika mandidy ny pejy voalohany
-  // Raha misy user ao amin'ny storage, dia "dashboard" avy hatrany, raha tsy izany "home"
-  const [page, setPage] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? "dashboard" : "home";
-  });
-
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
     try {
@@ -20,21 +13,18 @@ export default function App() {
     } catch { return null; }
   });
 
+  const [page, setPage] = useState("home"); 
   const [message, setMessage] = useState({ text: "", type: "success" });
 
-  // 2. Hash sync (Ity dia ho an'ny URL fotsiny, tsy misy setPage ka tsy miteraka menamena)
   useEffect(() => {
     window.location.hash = page;
   }, [page]);
 
-  // 3. FUNCTIONS
   const handleLoginSuccess = (userData) => {
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
-    setPage("dashboard"); // Mifindra any amin'ny dashboard avy hatrany
-    
+    setPage("dashboard"); // Mifindra ary mijanona ao!
     setMessage({ text: "Connexion réussie !", type: "success" });
-    setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
   };
 
   const handleLogout = () => {
@@ -44,9 +34,7 @@ export default function App() {
     setPage("home");
   };
 
-  // --- RENDERING LOGIC ---
 
-  // RAHA DASHBOARD: Ity irery no mipoitra
   if (page === "dashboard") {
     return (
       <Dashboard 
@@ -57,7 +45,6 @@ export default function App() {
     );
   }
 
-  // RAHA PEJY PUBLIQUES
   return (
     <div className="login-page">
       <div className="brand-panel">
