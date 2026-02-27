@@ -38,20 +38,18 @@ export default function App() {
   };
 
   const handleLoginSuccess = (userData) => {
-    // 1. Tehirizina ao amin'ny localStorage ny user (izany no miantoka ny fifindrana)
+    // 1. Tehirizina avy hatrany ny user (Synchronization)
     localStorage.setItem("user", JSON.stringify(userData));
-    
-    // 2. Ovaina miaraka ny user sy ny page mba tsy hisy fahatapahana
     setUser(userData);
-    setPage("dashboard");
     
-    // 3. Hafatra fahombiazana
-    setMessage({ text: "Connexion réussie !", type: "success" });
-
-    // 4. Fafana ny hafatra aorian'ny 3 segondra nefa tsy kitihina ny page
+    // 2. Miandry kely (100ms fotsiny) mba ho azo antoka fa voavaky ny state vao miova pejy
     setTimeout(() => {
-      setMessage({ text: "", type: "success" });
-    }, 3000);
+      setPage("dashboard");
+      setMessage({ text: "Connexion réussie !", type: "success" });
+    }, 100);
+
+    // 3. Fafana ny message aorian'ny 3s (Tsy kitihina ny setPage ato)
+    setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
   };
 
   const handleLogout = () => {

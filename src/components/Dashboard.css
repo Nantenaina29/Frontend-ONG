@@ -354,12 +354,22 @@
   left: 0;
   width: 100%;
   background-color: rgb(6, 177, 35); 
-  text-align: center;
-  padding: 15px 0; 
+  /* text-align: center; <-- Esorina ity fa soloina Flexbox eto ambany */
+  display: flex;
+  justify-content: space-between; /* Manosika ny soratra hisaraka farany sisiny */
+  align-items: center;
+  padding: 15px 30px; /* Nampiana padding kely ny sisiny (30px) mba tsy hikasika sisiny loatra */
   color: white;
   font-size: 0.9rem;
   border-top: 1px solid #eee;
   z-index: 1000; 
+}
+
+/* Fanampiny raha te hampiova kely ny lokon'ny anaranao ianao */
+.dev-credit {
+  font-style: italic;
+  font-size: 0.85rem;
+  opacity: 0.9;
 }
 /* --- MEMBRES PAGE SPECIFIC --- */
 .membre-page {

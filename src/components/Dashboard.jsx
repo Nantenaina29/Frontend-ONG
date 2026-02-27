@@ -193,8 +193,9 @@ export default function Dashboard({ user, setUser, onLogout }) {
           </div>
 
           <footer className="main-footer">
-            © {new Date().getFullYear()} ONG TSINJO AINA FIANARANTSOA - Système de Gestion Intégrée
-          </footer>
+          <span>© {new Date().getFullYear()} ONG TSINJO AINA FIANARANTSOA - Système de Gestion Intégrée</span>
+          <span className="dev-credit">Développé par : Elysé R.</span>
+        </footer>
         </main>
       </div>
     </div>
