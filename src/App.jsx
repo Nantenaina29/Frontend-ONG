@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
@@ -13,36 +13,28 @@ export default function App() {
     } catch { return null; }
   });
 
-  const [page, setPage] = useState("home"); 
-  const [message, setMessage] = useState({ text: "", type: "success" });
+  // Jereo raha efa tao amin'ny Dashboard izy teo aloha
+  const [page, setPage] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? "dashboard" : "home";
+  });
 
-  useEffect(() => {
-    window.location.hash = page;
-  }, [page]);
+  const [message, setMessage] = useState({ text: "", type: "success" });
 
   const handleLoginSuccess = (userData) => {
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
-    setPage("dashboard"); // Mifindra ary mijanona ao!
-    setMessage({ text: "Connexion réussie !", type: "success" });
+    setPage("dashboard"); 
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("ACCESS_TOKEN");
-    localStorage.removeItem("user");
+    localStorage.clear(); // Fafao daholo mba hadio
     setUser(null);
     setPage("home");
   };
 
-
-  if (page === "dashboard") {
-    return (
-      <Dashboard 
-        user={user} 
-        setUser={setUser} 
-        onLogout={handleLogout} 
-      />
-    );
+  if (page === "dashboard" && user) {
+    return <Dashboard user={user} setUser={setUser} onLogout={handleLogout} />;
   }
 
   return (

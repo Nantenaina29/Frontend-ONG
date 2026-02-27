@@ -38,12 +38,14 @@ export default function StatistiquePage() {
           axiosClient.get("/responsables"),
           axiosClient.get("/formations")
         ]);
+        
+        // Fiarovana: raha sendra tsy array ny any amin'ny DB
         setData({
-          membres: resM.data?.data || resM.data || [],
-          gs: resG.data?.data || resG.data || [],
-          reseaux: resR.data?.data || resR.data || [],
-          responsables: resP.data?.data || resP.data || [],
-          formations: resF.data?.data || resF.data || []
+          membres: Array.isArray(resM.data?.data) ? resM.data.data : (Array.isArray(resM.data) ? resM.data : []),
+          gs: Array.isArray(resG.data?.data) ? resG.data.data : (Array.isArray(resG.data) ? resG.data : []),
+          reseaux: Array.isArray(resR.data?.data) ? resR.data.data : (Array.isArray(resR.data) ? resR.data : []),
+          responsables: Array.isArray(resP.data?.data) ? resP.data.data : (Array.isArray(resP.data) ? resP.data : []),
+          formations: Array.isArray(resF.data?.data) ? resF.data.data : (Array.isArray(resF.data) ? resF.data : [])
         });
       } catch (err) {
         console.error("Erreur API:", err);
@@ -56,32 +58,36 @@ export default function StatistiquePage() {
 
   const stats = useMemo(() => {
     const taona = new Date().getFullYear();
-    const fData = data.formations;
+    // Fiarovana: asiana default array []
+    const fData = data?.formations || [];
+    const mData = data?.membres || [];
+    const gData = data?.gs || [];
+    const rData = data?.responsables || [];
 
     const statsTaranja = [
-      { name: 'G.Simpli', valeur: fData.filter(m => m.gestionsimplifiee || m.GestionSimplifiee).length },
-      { name: 'AgroEco', valeur: fData.filter(m => m.agroeco || m.AgroEco).length },
-      { name: 'Semence', valeur: fData.filter(m => m.productionsemence || m.ProductionSemence).length },
-      { name: 'Nutrition', valeur: fData.filter(m => m.nutrition || m.Nutrition).length },
-      { name: 'C.Produit', valeur: fData.filter(m => m.conservationproduit || m.ConservationProduit).length },
-      { name: 'T.Produit', valeur: fData.filter(m => m.transformationproduit || m.TransformationProduit).length },
-      { name: 'Genre', valeur: fData.filter(m => m.genre || m.Genre).length },
-      { name: 'EPRACC', valeur: fData.filter(m => m.epracc || m.EPRACC).length },
+      { name: 'G.Simpli', valeur: fData.filter(m => m?.gestionsimplifiee || m?.GestionSimplifiee).length },
+      { name: 'AgroEco', valeur: fData.filter(m => m?.agroeco || m?.AgroEco).length },
+      { name: 'Semence', valeur: fData.filter(m => m?.productionsemence || m?.ProductionSemence).length },
+      { name: 'Nutrition', valeur: fData.filter(m => m?.nutrition || m?.Nutrition).length },
+      { name: 'C.Produit', valeur: fData.filter(m => m?.conservationproduit || m?.ConservationProduit).length },
+      { name: 'T.Produit', valeur: fData.filter(m => m?.transformationproduit || m?.TransformationProduit).length },
+      { name: 'Genre', valeur: fData.filter(m => m?.genre || m?.Genre).length },
+      { name: 'EPRACC', valeur: fData.filter(m => m?.epracc || m?.EPRACC).length },
     ];
 
     const totalM = fData.length;
-    const totalAutonome = fData.filter(f => f.autonomie === 'Autonome' || f.Autonomie === 'Autonome').length;
+    const totalAutonome = fData.filter(f => f?.autonomie === 'Autonome' || f?.Autonomie === 'Autonome').length;
 
     const ageM = [
-      { name: '<18', valeur: data.membres.filter(m => (taona - (m.AnneeNaissance || 2000)) < 18).length },
-      { name: '18-26', valeur: data.membres.filter(m => {
-          const a = taona - (m.AnneeNaissance || 2000); return a >= 18 && a <= 26;
+      { name: '<18', valeur: mData.filter(m => (taona - (m?.AnneeNaissance || 2000)) < 18).length },
+      { name: '18-26', valeur: mData.filter(m => {
+          const a = taona - (m?.AnneeNaissance || 2000); return a >= 18 && a <= 26;
       }).length },
-      { name: '>27', valeur: data.membres.filter(m => (taona - (m.AnneeNaissance || 2000)) > 26).length }
+      { name: '>27', valeur: mData.filter(m => (taona - (m?.AnneeNaissance || 2000)) > 26).length }
     ];
 
-    const gsCounts = data.gs.reduce((acc, curr) => {
-        const year = new Date(curr.dateCreation || curr.DateCreation || curr.created_at).getFullYear();
+    const gsCounts = gData.reduce((acc, curr) => {
+        const year = new Date(curr?.dateCreation || curr?.DateCreation || curr?.created_at).getFullYear();
         if (!isNaN(year)) acc[year] = (acc[year] || 0) + 1;
         return acc;
     }, {});
@@ -89,26 +95,29 @@ export default function StatistiquePage() {
 
     const normalizePoste = (txt) => txt ? txt.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
     const respData = [
-      { name: 'Président(e)', valeur: data.responsables.filter(r => normalizePoste(r.Poste || r.poste).includes("presid")).length },
-      { name: 'Secrétaire', valeur: data.responsables.filter(r => normalizePoste(r.Poste || r.poste).includes("secr")).length },
-      { name: 'Trésorier(e)', valeur: data.responsables.filter(r => normalizePoste(r.Poste || r.poste).includes("treso")).length },
-      { name: 'Conseiller(e)', valeur: data.responsables.filter(r => normalizePoste(r.Poste || r.poste).includes("conseil")).length },
-      { name: 'Membres', valeur: data.responsables.filter(r => normalizePoste(r.Poste || r.poste).includes("membre")).length }
+      { name: 'Président(e)', valeur: rData.filter(r => normalizePoste(r?.Poste || r?.poste).includes("presid")).length },
+      { name: 'Secrétaire', valeur: rData.filter(r => normalizePoste(r?.Poste || r?.poste).includes("secr")).length },
+      { name: 'Trésorier(e)', valeur: rData.filter(r => normalizePoste(r?.Poste || r?.poste).includes("treso")).length },
+      { name: 'Conseiller(e)', valeur: rData.filter(r => normalizePoste(r?.Poste || r?.poste).includes("conseil")).length },
+      { name: 'Membres', valeur: rData.filter(r => normalizePoste(r?.Poste || r?.poste).includes("membre")).length }
     ];
 
     return { ageM, gsByYear, respData, statsTaranja, totalM, totalAutonome };
   }, [data]);
 
-      if (loading) {
-        return (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh', flexDirection: 'column' }}>
-            <div className="spinner"></div>
-            <p style={{ marginTop: '20px', fontWeight: 'bold', color: '#4e73df' }}>
-              Chargement des données en cours... 
-            </p>
-          </div>
-        );
-      }
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh', flexDirection: 'column' }}>
+        <div className="spinner"></div>
+        <p style={{ marginTop: '20px', fontWeight: 'bold', color: '#4e73df' }}>Chargement des données...</p>
+      </div>
+    );
+  }
+
+  // RAHA TSY MISY DATA (Sakanana tsy hi-crash ny Charts)
+  if (!stats.ageM.length && !stats.gsByYear.length) {
+      return <div style={{padding: '50px', textAlign: 'center'}}>Aucune donnée disponible pour le moment.</div>;
+  }
 
   return (
     <div className="stat-page-container" style={{ padding: '20px', backgroundColor: '#f8f9fc' }}> 
