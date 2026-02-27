@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
@@ -13,22 +13,23 @@ export default function App() {
     } catch { return null; }
   });
 
-  // Jereo raha efa nanao login izy taloha
-  const [page, setPage] = useState(() => {
-    return localStorage.getItem("isLoggedIn") === "true" ? "dashboard" : "home";
-  });
-
+  const [page, setPage] = useState("home"); 
   const [message, setMessage] = useState({ text: "", type: "success" });
+
+  useEffect(() => {
+    window.location.hash = page;
+  }, [page]);
 
   const handleLoginSuccess = (userData) => {
     localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("isLoggedIn", "true"); // Tehirizo fa tafiditra izy
     setUser(userData);
-    setPage("dashboard");
+    setPage("dashboard"); // Mifindra ary mijanona ao!
+    setMessage({ text: "Connexion réussie !", type: "success" });
   };
 
   const handleLogout = () => {
-    localStorage.clear();
+    localStorage.removeItem("ACCESS_TOKEN");
+    localStorage.removeItem("user");
     setUser(null);
     setPage("home");
   };
