@@ -38,11 +38,30 @@ export default function App() {
 
   // Raha tsy izany, ireto pejy ireto no aseho
   return (
-    <div className="login-page">
+<div className="login-page">
       <div className="brand-panel">
         <div className="brand-content">
           <img src="/Logo TAF 3D.png" alt="Logo TAF3D" className="brand-logo" />
-          <h1 className="brand-title">ONG <span>Tsinjo Aina Fianarantsoa</span></h1>
+          
+          <h1 className="brand-title">
+            ONG <span>Tsinjo Aina Fianarantsoa</span>
+          </h1>
+
+          {/* Eto ireo paragraphe rehetra nanjavona teo */}
+          <div className="brand-text-content">
+            <p className="brand-description">
+              "Promouvoir un développement durable et inclusif au cœur de la Haute Matsiatra."
+            </p>
+            
+            <p className="brand-mission">
+              Notre mission est d'accompagner les communautés locales vers une autonomie 
+              réelle à travers l'éducation, la formation technique et le soutien social.
+            </p>
+
+            <div className="brand-motto">
+              <span>Solidarité</span> • <span>Développement</span> • <span>Avenir</span>
+            </div>
+          </div>
         </div>
       </div>
 
