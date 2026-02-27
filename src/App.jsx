@@ -38,12 +38,20 @@ export default function App() {
   };
 
   const handleLoginSuccess = (userData) => {
+    // 1. Tehirizina ao amin'ny localStorage ny user (izany no miantoka ny fifindrana)
     localStorage.setItem("user", JSON.stringify(userData));
+    
+    // 2. Ovaina miaraka ny user sy ny page mba tsy hisy fahatapahana
     setUser(userData);
     setPage("dashboard");
-    setMessage({ text: "Connexion réussie !", type: "success" });
     
-    setTimeout(() => setMessage({ text: "", type: "success" }), 3000);
+    // 3. Hafatra fahombiazana
+    setMessage({ text: "Connexion réussie !", type: "success" });
+
+    // 4. Fafana ny hafatra aorian'ny 3 segondra nefa tsy kitihina ny page
+    setTimeout(() => {
+      setMessage({ text: "", type: "success" });
+    }, 3000);
   };
 
   const handleLogout = () => {
