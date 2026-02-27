@@ -67,7 +67,7 @@ export default function App() {
 
       <div className="form-panel">
         <div className="auth-dynamic-content">
-          {page === "home" && <MainPage onGoToLogin={() => setPage("login")} />}
+          
           
           {page === "login" && (
             <Login
