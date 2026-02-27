@@ -22,34 +22,34 @@ export default function Login({ onSwitch, onLoginSuccess }) {
         });
 
         if (res.data && res.data.token) {
-            // 1. Tehirizina ny Token
+            // 1. Stockage du Token
             localStorage.setItem("ACCESS_TOKEN", res.data.token);
             
-            // 2. Swal fahombiazana
+            // 2. Notification de succès (SweetAlert2)
             Swal.fire({
                 icon: 'success',
-                title: 'Tafiditra soa aman-tsara!',
-                text: 'Andraso kely, hamindra anao izahay...',
+                title: 'Connexion réussie !',
+                text: 'Veuillez patienter, nous vous redirigeons...',
                 timer: 2000,
                 showConfirmButton: false,
                 timerProgressBar: true,
             });
 
-            // 3. Antsoina ny onLoginSuccess rehefa avy eo
+            // 3. Appel de onLoginSuccess après le délai
             setTimeout(() => {
                 onLoginSuccess(res.data.user);
             }, 2000);
         }
     } catch (err) {
-        // Ity no mandray ny 401, 422, na 500
-        const message = err.response?.data?.message || "Nisy olana teo amin'ny server. Jereo ny fifandraisanao.";
+        // Gestion des erreurs 401, 422, ou 500
+        const message = err.response?.data?.message || "Un problème est survenu sur le serveur. Veuillez vérifier votre connexion.";
         
         Swal.fire({
             icon: 'error',
-            title: 'Fidirana nolavina',
+            title: 'Accès refusé',
             text: message,
             confirmButtonColor: '#3085d6',
-            confirmButtonText: 'Haverina indray'
+            confirmButtonText: 'Réessayer'
         });
 
         console.error('API Error:', err.response?.status, err.response?.data);
