@@ -24,23 +24,31 @@ export default function Login({ onSwitch, onLoginSuccess }) {
     try {
       const res = await axiosClient.post('/login', { email, password });
       
-      // 🔥 CHECK EXACT RESPONSE
-      console.log('RESPONSE:', res.data);
+      // 🎯 FLEXIBLE - marche avec TOUS backend responses
+      let token = res.data.token;
+      let user = res.data.user;
       
-      // Flexible structure - marche avec toutes les réponses backend
-      const token = res.data.token || res.data.data?.token;
-      const user = res.data.user || res.data.data?.user;
+      // Alternative structures
+      if (!token && res.data.data) {
+        token = res.data.data.token;
+        user = res.data.data.user;
+      }
       
+      console.log('TOKEN:', token);
+      console.log('USER:', user);
+  
       if (token && user) {
         localStorage.setItem("ACCESS_TOKEN", token);
         localStorage.setItem("user", JSON.stringify(user));
-        onLoginSuccess(user);  // Dashboard!
+        console.log('🚀 LOGIN OK → Dashboard!');
+        onLoginSuccess(user);  // 🎉 DASHBOARD!
       } else {
-        setLocalMessage({ text: "Login échoué - Vérifiez vos identifiants", type: "error" });
+        setLocalMessage({ text: "Identifiants incorrects", type: "error" });
       }
     } catch (err) {
-      console.error('ERROR:', err.response?.data);
-      setLocalMessage({ text: "Erreur serveur", type: "error" });
+      const message = err.response?.data?.message || "Erreur serveur";
+      setLocalMessage({ text: message, type: "error" });
+      console.error('ERROR:', err.response?.status, err.response?.data);
     } finally {
       setLoading(false);
     }
