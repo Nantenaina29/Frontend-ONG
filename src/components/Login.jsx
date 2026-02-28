@@ -165,7 +165,14 @@ export default function Login({ onSwitch, onLoginSuccess }) {
 
         {/* BUTTON */}
         <button type="submit" disabled={loading} className="btn-submit big-btn">
-          {loading ? "En attente..." : (
+          {loading ? (
+            <span className="loading-text">
+              Connexion
+              <span className="dot-animation">.</span>
+              <span className="dot-animation">.</span>
+              <span className="dot-animation">.</span>
+            </span>
+          ) : (
             <>
               <FaSignInAlt /> <span>Se connecter</span>
             </>
