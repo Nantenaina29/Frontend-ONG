@@ -149,11 +149,10 @@ const tauxAutonomie = totalMembres > 0 ? ((totalAutonome / totalMembres) * 100).
     Swal.fire("Bien!", "Excel généré!", "success");
   };
 
-// --- 2. FETCH DATA (Nampiana ny search ao amin'ny URL) ---
-// Ao anatin'ny FormationPage.jsx
+
 const fetchData = useCallback(async () => {
   try {
-    // Ampiasao ny axiosClient sy ny backticks (`) ho an'ny ${search}
+
     const res = await axiosClient.get(`/api/formations?search=${search}`);
     
     // Halaina ny data
@@ -226,7 +225,7 @@ useEffect(() => {
     };
   
     try {
-      await axiosClient.post("/formations", finalData);
+      await axiosClient.post("/api/formations", finalData);
       Swal.fire("Bien!", "Formation ajout avec succès!", "success");
       fetchData();
       setShowModal(false);

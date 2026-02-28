@@ -209,7 +209,7 @@ const exportFemmesBureauPDF = async () => {
     if (!selectedRespo) return;
 
     try {
-      await axiosClient.put(`/responsables/${selectedRespo.CodeRespo}`, {
+      await axiosClient.put(`/api/responsables/${selectedRespo.CodeRespo}`, {
         Poste: newPoste
     });
 

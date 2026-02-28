@@ -146,7 +146,7 @@ export default function MembresPage() {
   const handleAdd = async (e) => {
     e.preventDefault();
     try {
-      const res = await axiosClient.post("/membres", {
+      const res = await axiosClient.post("/api/membres", {
         NomMembre: nom, PrenomMembre: prenom, AnneeNaissance: parseInt(annee), Sexe: sexe || "Homme", Chef: chef || "Non", NumMenage: parseInt(numMenage)
       });
       setMembres([...membres, {
