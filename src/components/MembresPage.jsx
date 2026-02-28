@@ -403,7 +403,7 @@ export default function MembresPage() {
           </table>
       </div>
      {/* --- MODAL AJOUT --- */}
-{showAddModal && (
+     {showAddModal && (
   <div className="modal-overlay">
     <div className="modal-content">
       <h2>Ajouter un Membre</h2>
@@ -411,22 +411,22 @@ export default function MembresPage() {
         
         {/* Andalana 1: Nom sy Prenom */}
         <div className="form-group">
-          <label>Nom :</label>
-          <input value={nom} onChange={(e) => setNom(e.target.value)} required placeholder="Nom du membre" />
+          <label htmlFor="addNom">Nom :</label>
+          <input  id="addNom"  name="NomMembre" value={nom}   onChange={(e) => setNom(e.target.value)}  required  placeholder="Nom du membre"  />
         </div>
         <div className="form-group">
-          <label>Prénom :</label>
-          <input value={prenom} onChange={(e) => setPrenom(e.target.value)} required placeholder="Prénom du membre" />
+          <label htmlFor="addPrenom">Prénom :</label>
+            <input id="addPrenom"  name="PrenomMembre"  value={prenom}  onChange={(e) => setPrenom(e.target.value)}  required   placeholder="Prénom du membre"  />
         </div>
 
         {/* Andalana 2: Année sy Sexe */}
         <div className="form-group">
-          <label>Année de naissance :</label>
-          <input type="number" value={annee} onChange={(e) => setAnnee(e.target.value)} required />
+          <label htmlFor="addAnnee">Année de naissance :</label>
+          <input  id="addAnnee"name="AnneeNaissance" type="number"  value={annee}   onChange={(e) => setAnnee(e.target.value)}   required  />
         </div>
         <div className="form-group">
-          <label>Sexe :</label>
-          <select value={sexe} onChange={(e) => setSexe(e.target.value)} required>
+          <label htmlFor="addSexe">Sexe :</label>
+          <select id="addSexe" name="Sexe" value={sexe}  onChange={(e) => setSexe(e.target.value)}  required >
             <option value="Homme">Homme</option>
             <option value="Femme">Femme</option>
           </select>
@@ -434,31 +434,27 @@ export default function MembresPage() {
 
         {/* Andalana 3: Chef sy N° Ménage */}
         <div className="form-group">
-          <label>Chef :</label>
-          <select value={chef} onChange={(e) => setChef(e.target.value)}>
+          <label htmlFor="addChef">Chef :</label>
+          <select id="addChef" name="Chef" value={chef}  onChange={(e) => setChef(e.target.value)}>
             <option value="Non">Non</option>
             <option value="Chef">Chef</option>
           </select>
         </div>
         <div className="form-group">
-          <label>N° Ménage :</label>
-          <input type="number" value={numMenage} onChange={(e) => setNumMenage(e.target.value)} required />
+          <label htmlFor="addNumMenage">N° Ménage :</label>
+          <input  id="addNumMenage" name="NumMenage" type="number"   value={numMenage}  onChange={(e) => setNumMenage(e.target.value)}   required  />
         </div>
 
-        {/* Ny Bokotra (grid-column: span 2 dia manery azy ho eo ambany) */}
+        {/* Ny Bokotra */}
         <div className="modal-buttons">
-          <button type="button" className="btn-cancel" onClick={() => setShowAddModal(false)}>
-            Annuler
-          </button>
-          <button type="submit" className="btn-save">
-            Enregistrer
-          </button>
+          <button type="button" className="btn-cancel" onClick={() => setShowAddModal(false)}> Annuler</button>
+          <button type="submit" className="btn-save"> Enregistrer</button>
         </div>
       </form>
     </div>
   </div>
 )}
-     {showEditModal && (
+{showEditModal && (
   <div className="modal-overlay">
     <div className="modal-content">
       {/* Nampiana lohateny mazava kokoa */}
@@ -469,71 +465,45 @@ export default function MembresPage() {
           {/* Ny 'display: contents' dia manampy ny CSS Grid hahita ireo div ambany ireo mivantana */}
           
           <div className="form-group">
-            <label>Nom :</label>
-            <input 
-              value={nom} 
-              onChange={(e) => setNom(e.target.value)} 
-              required 
-            />
+            <label htmlFor="editNom">Nom :</label>
+            <input id="editNom" name="NomMembre" value={nom}  onChange={(e) => setNom(e.target.value)}  required />
           </div>
 
           <div className="form-group">
-            <label>Prénom :</label>
-            <input 
-              value={prenom} 
-              onChange={(e) => setPrenom(e.target.value)} 
-              required 
-            />
+            <label htmlFor="editPrenom">Prénom :</label>
+            <input  id="editPrenom" name="PrenomMembre" value={prenom}  onChange={(e) => setPrenom(e.target.value)}  required />
           </div>
 
           <div className="form-group">
-            <label>Année de naissance :</label>
-            <input 
-              type="number" 
-              value={annee} 
-              onChange={(e) => setAnnee(e.target.value)} 
-              required 
-            />
+            <label htmlFor="editAnnee">Année de naissance :</label>
+            <input  id="editAnnee" name="AnneeNaissance" type="number" value={annee}  onChange={(e) => setAnnee(e.target.value)}  required />
           </div>
 
           <div className="form-group">
-            <label>Sexe :</label>
-            <select value={sexe} onChange={(e) => setSexe(e.target.value)} required>
+            <label htmlFor="editSexe">Sexe :</label>
+            <select id="editSexe" name="Sexe" value={sexe} onChange={(e) => setSexe(e.target.value)} required>
               <option value="Homme">Homme</option>
               <option value="Femme">Femme</option>
             </select>
           </div>
 
           <div className="form-group">
-            <label>Chef :</label>
-            <select value={chef} onChange={(e) => setChef(e.target.value)}>
+            <label htmlFor="editChef">Chef :</label>
+            <select id="editChef" name="Chef" value={chef} onChange={(e) => setChef(e.target.value)}>
               <option value="Chef">Chef</option>
               <option value="Non">Non</option>
             </select>
           </div>
 
           <div className="form-group">
-            <label>N° Ménage :</label>
-            <input 
-              type="number" 
-              value={numMenage} 
-              onChange={(e) => setNumMenage(e.target.value)} 
-              required 
-            />
+            <label htmlFor="editNumMenage">N° Ménage :</label>
+            <input id="editNumMenage" name="NumMenage" type="number" value={numMenage}  onChange={(e) => setNumMenage(e.target.value)}   required />
           </div>
         </div>
 
         <div className="modal-buttons">
-          <button 
-            type="button" 
-            className="btn-cancel" 
-            onClick={() => setShowEditModal(false)}
-          >
-            Annuler
-          </button>
-          <button type="submit" className="btn-save">
-            Mettre à jour
-          </button>
+          <button  type="button"  className="btn-cancel"  onClick={() => setShowEditModal(false)} >  Annuler</button>
+          <button type="submit" className="btn-save"> Mettre à jour</button>
         </div>
       </form>
     </div>
