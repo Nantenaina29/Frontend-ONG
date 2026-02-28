@@ -151,7 +151,7 @@ export default function MembresPage() {
         NomMembre: nom,
         PrenomMembre: prenom,
         AnneeNaissance: parseInt(annee),
-        Sexe: sexe === "Homme" ? "Homme" : "Femme", 
+        Sexe: sexe === "Homme" ? "H" : "F", 
         Chef: chef,
         NumMenage: parseInt(numMenage)
       };
@@ -168,7 +168,7 @@ export default function MembresPage() {
           nom: newMember.NomMembre,
           prenom: newMember.PrenomMembre,
           annee: newMember.AnneeNaissance,
-          sexe: newMember.Sexe === "Homme" ? "Homme" : "Femme",
+          sexe: newMember.Sexe === "H" ? "Homme" : "Femme",
           chef: newMember.Chef,
           numMenage: newMember.NumMenage
         }]);
