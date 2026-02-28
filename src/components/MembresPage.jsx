@@ -110,7 +110,7 @@ export default function MembresPage() {
     const annee = (m.annee || "").toString();
     const numMenage = (m.numMenage || "").toString();
     
-    // Hamarino tsara ny "C" na "c" eto:
+
     const chef = (m.Chef || m.chef || "").toLowerCase().trim(); 
     
     return (
@@ -145,44 +145,18 @@ export default function MembresPage() {
 
   const handleAdd = async (e) => {
     e.preventDefault();
-    
     try {
-      const dataToSend = {
-        NomMembre: nom,
-        PrenomMembre: prenom,
-        AnneeNaissance: parseInt(annee),
-        Sexe: sexe === "Homme" ? "H" : "F", 
-        Chef: chef,
-        NumMenage: parseInt(numMenage)
-      };
-  
-      // TANDREMO: "/membres" ihany fa aza asiana "/api" intsony
-      const res = await axiosClient.post("/membres", dataToSend);
-  
-      // Hamarino raha nisy data niverina
-      if (res.data && (res.data.data || res.data)) {
-        const newMember = res.data.data || res.data;
-        
-        setMembres([...membres, {
-          id: newMember.NumMembre,
-          nom: newMember.NomMembre,
-          prenom: newMember.PrenomMembre,
-          annee: newMember.AnneeNaissance,
-          sexe: newMember.Sexe === "H" ? "Homme" : "Femme",
-          chef: newMember.Chef,
-          numMenage: newMember.NumMenage
-        }]);
-  
-        Swal.fire("Bien!", "Ajout d'un membre réussi.", "success");
-        setShowAddModal(false);
-      }
+      const res = await axiosClient.post("/membres", {
+        NomMembre: nom, PrenomMembre: prenom, AnneeNaissance: parseInt(annee), Sexe: sexe || "Homme", Chef: chef || "Non", NumMenage: parseInt(numMenage)
+      });
+      setMembres([...membres, {
+        id: res.data.data.NumMembre, nom: res.data.data.NomMembre, prenom: res.data.data.PrenomMembre, annee: res.data.data.AnneeNaissance, sexe: res.data.data.Sexe, chef: res.data.data.Chef, numMenage: res.data.data.NumMenage
+      }]);
+      Swal.fire("Bien!", "Ajout d'un membre réussi.", "success");
+      setShowAddModal(false);
     } catch (err) {
-      console.error("Détails Erreur:", err.response?.data || err.message);
-      
-      if (err.code === 'ECONNABORTED' || err.message.includes('network')) {
-         Swal.fire("Serveur occupé", "Le serveur Render se réveille, réessayez dans 10 secondes.", "warning");
-      } else if (err.response && err.response.status === 422) {
-        Swal.fire("Attention", "Données invalides : " + JSON.stringify(err.response.data.errors), "warning");
+      if (err.response && err.response.status === 422) {
+        Swal.fire("Attention", err.response.data.message, "warning");
       } else {
         Swal.fire("Erreur", "Erreur lors de l'ajout du membre!", "error");
       }
