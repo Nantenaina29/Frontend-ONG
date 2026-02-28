@@ -145,47 +145,52 @@ export default function MembresPage() {
 
   const handleAdd = async (e) => {
     e.preventDefault();
+    console.log("Submit clicked, sending data..."); // Fanamarinana 1
+  
     try {
-      // 1. Data alefa (Mifanaraka amin'ny Validation Laravel)
       const dataToSend = {
         NomMembre: nom,
         PrenomMembre: prenom,
         AnneeNaissance: parseInt(annee),
-        Sexe: sexe, // Alefao "Homme" na "Femme" mivantana araka ny select-nao
-        Chef: chef, // Alefao "Chef" na "Non"
+        Sexe: sexe, 
+        Chef: chef,
         NumMenage: parseInt(numMenage)
       };
   
       const res = await axiosClient.post("/membres", dataToSend);
   
-      // 2. Raha tafiditra (Status 201)
-      if (res.data && res.data.data) {
-        const newM = res.data.data;
+      console.log("Full Response from server:", res); // Fanamarinana 2
   
+      if (res.data) {
+        const newM = res.data.data || res.data;
         setMembres(prev => [...prev, {
           id: newM.NumMembre,
           nom: newM.NomMembre,
           prenom: newM.PrenomMembre,
           annee: newM.AnneeNaissance,
-
           sexe: newM.Sexe === "H" ? "Homme" : (newM.Sexe === "F" ? "Femme" : newM.Sexe),
           chef: newM.Chef,
           numMenage: newM.NumMenage
         }]);
   
-        Swal.fire("Bien!", "Ajout d'un membre réussi.", "success");
+        Swal.fire("Bien!", "Ajout réussi", "success");
         setShowAddModal(false);
-        
-        // Diovy ny formulaire
-        setNom(""); setPrenom(""); setAnnee(""); setNumMenage("");
       }
     } catch (err) {
-      console.error("Backend Error:", err.response?.data);
-      const message = err.response?.data?.message || "Erreur lors de l'ajout";
-      Swal.fire("Erreur", message, "error");
+      // ITY NO TENA ZAVA-DEHIBE:
+      console.error("API Error Details:", err.response?.data || err); 
+      
+      const errorDetail = err.response?.data?.message || err.message || "Erreur inconnue";
+      const sqlError = err.response?.data?.sql_error || "";
+      
+      Swal.fire({
+        icon: 'error',
+        title: 'Erreur API',
+        text: errorDetail,
+        footer: sqlError ? `<pre style="font-size:10px">${sqlError}</pre>` : ''
+      });
     }
   };
-
   const handleEdit = async (e) => {
     e.preventDefault();
     
