@@ -146,20 +146,43 @@ export default function MembresPage() {
   const handleAdd = async (e) => {
     e.preventDefault();
     try {
-      const res = await axiosClient.post("/membres", {
-        NomMembre: nom, PrenomMembre: prenom, AnneeNaissance: parseInt(annee), Sexe: sexe || "Homme", Chef: chef || "Non", NumMenage: parseInt(numMenage)
-      });
-      setMembres([...membres, {
-        id: res.data.data.NumMembre, nom: res.data.data.NomMembre, prenom: res.data.data.PrenomMembre, annee: res.data.data.AnneeNaissance, sexe: res.data.data.Sexe, chef: res.data.data.Chef, numMenage: res.data.data.NumMenage
-      }]);
-      Swal.fire("Bien!", "Ajout d'un membre réussi.", "success");
-      setShowAddModal(false);
-    } catch (err) {
-      if (err.response && err.response.status === 422) {
-        Swal.fire("Attention", err.response.data.message, "warning");
-      } else {
-        Swal.fire("Erreur", "Erreur lors de l'ajout du membre!", "error");
+      // 1. Data alefa (Mifanaraka amin'ny Validation Laravel)
+      const dataToSend = {
+        NomMembre: nom,
+        PrenomMembre: prenom,
+        AnneeNaissance: parseInt(annee),
+        Sexe: sexe, // Alefao "Homme" na "Femme" mivantana araka ny select-nao
+        Chef: chef, // Alefao "Chef" na "Non"
+        NumMenage: parseInt(numMenage)
+      };
+  
+      const res = await axiosClient.post("/membres", dataToSend);
+  
+      // 2. Raha tafiditra (Status 201)
+      if (res.data && res.data.data) {
+        const newM = res.data.data;
+  
+        setMembres(prev => [...prev, {
+          id: newM.NumMembre,
+          nom: newM.NomMembre,
+          prenom: newM.PrenomMembre,
+          annee: newM.AnneeNaissance,
+
+          sexe: newM.Sexe === "H" ? "Homme" : (newM.Sexe === "F" ? "Femme" : newM.Sexe),
+          chef: newM.Chef,
+          numMenage: newM.NumMenage
+        }]);
+  
+        Swal.fire("Bien!", "Ajout d'un membre réussi.", "success");
+        setShowAddModal(false);
+        
+        // Diovy ny formulaire
+        setNom(""); setPrenom(""); setAnnee(""); setNumMenage("");
       }
+    } catch (err) {
+      console.error("Backend Error:", err.response?.data);
+      const message = err.response?.data?.message || "Erreur lors de l'ajout";
+      Swal.fire("Erreur", message, "error");
     }
   };
 
